@@ -120,14 +120,14 @@ const config = {
     '@typescript-eslint/require-array-sort-compare': 'error',
     '@typescript-eslint/unified-signatures': 'error',
     '@typescript-eslint/prefer-for-of': 'error',
-    // '@typescript-eslint/no-unused-vars': [
-    //   'error',
-    //   {
-    //     varsIgnorePattern: '^_',
-    //     argsIgnorePattern: '^_',
-    //     caughtErrorsIgnorePattern: '^_',
-    //   },
-    // ],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
     'unused-imports/no-unused-imports': 'error',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
