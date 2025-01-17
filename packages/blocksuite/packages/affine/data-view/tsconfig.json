@@ -1,0 +1,27 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "incremental": true,
+    "rootDir": "./src/",
+    "outDir": "./dist/",
+    "noEmit": false
+  },
+  "include": ["./src"],
+  "references": [
+    {
+      "path": "../components"
+    },
+    {
+      "path": "../shared"
+    },
+    {
+      "path": "../../framework/block-std"
+    },
+    {
+      "path": "../../framework/global"
+    },
+    {
+      "path": "../../framework/store"
+    }
+  ]
+}
