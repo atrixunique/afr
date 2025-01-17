@@ -33,6 +33,8 @@ export class CloudDocEngineServer implements DocServer {
     this.disposeSocket = dispose;
   }
 
+  
+
   private async clientHandShake() {
     await this.socket.emitWithAck('space:join', {
       spaceType: 'workspace',

@@ -65,13 +65,13 @@ export const RouteContainer = () => {
           viewId={view.id}
           className={styles.viewHeaderContainer}
         />
-        {!BUILD_CONFIG.isElectron && viewPosition.isLast && (
+        {/* {!BUILD_CONFIG.isElectron && viewPosition.isLast && (
           <ToggleButton
             show={!sidebarOpen}
             className={styles.rightSidebarButton}
             onToggle={handleToggleSidebar}
           />
-        )}
+        )} */}
       </div>
 
       <AffineErrorBoundary>

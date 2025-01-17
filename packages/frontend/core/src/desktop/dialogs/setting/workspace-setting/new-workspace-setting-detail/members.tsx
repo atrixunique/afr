@@ -147,7 +147,7 @@ export const CloudWorkspaceMembersPanel = ({
     return (
       <span>
         {t['com.affine.payment.member.description2']()}
-        {hasPaymentFeature ? (
+        {/* {hasPaymentFeature ? (
           <div
             className={style.goUpgradeWrapper}
             onClick={handleUpgradeConfirm}
@@ -156,7 +156,7 @@ export const CloudWorkspaceMembersPanel = ({
               {t['com.affine.payment.member.description.choose-plan']()}
             </span>
           </div>
-        ) : null}
+        ) : null} */}
       </span>
     );
   }, [handleUpgradeConfirm, hasPaymentFeature, t, workspaceQuota]);

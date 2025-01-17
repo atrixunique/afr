@@ -101,7 +101,8 @@ export const SignInWithPassword: FC<AuthPanelProps<'signInWithPassword'>> = ({
     <>
       <ModalHeader
         title={t['com.affine.auth.sign.in']()}
-        subTitle={t['com.affine.brand.affineCloud']()}
+        // subTitle={t['com.affine.brand.affineCloud']()}
+        subTitle={'Memo Notion 1.0'}
       />
 
       <Wrapper
@@ -143,7 +144,8 @@ export const SignInWithPassword: FC<AuthPanelProps<'signInWithPassword'>> = ({
             {t['com.affine.auth.forget']()}
           </a>
         </div>
-        {(verifyToken || !needCaptcha) && (
+        
+        {/* {(verifyToken || !needCaptcha) && (
           <div className={styles.sendMagicLinkButtonRow}>
             <a
               data-testid="send-magic-link-button"
@@ -153,7 +155,7 @@ export const SignInWithPassword: FC<AuthPanelProps<'signInWithPassword'>> = ({
               {t['com.affine.auth.sign.auth.code.send-email.sign-in']()}
             </a>
           </div>
-        )}
+        )} */}
         {!verifyToken && needCaptcha && <Captcha />}
         <Button
           data-testid="sign-in-button"

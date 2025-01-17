@@ -473,7 +473,7 @@ export const General = () => {
       <AISettings />
       <FontFamilySettings />
       <CustomFontFamilySettings />
-      <NewDocDefaultModeSettings />
+      {/* <NewDocDefaultModeSettings /> */}
       {BUILD_CONFIG.isElectron && <SpellCheckSettings />}
       {/* // TODO(@akumatus): implement these settings
         <DeFaultCodeBlockSettings />

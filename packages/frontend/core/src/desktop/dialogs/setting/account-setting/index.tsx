@@ -222,13 +222,13 @@ export const AccountSetting = ({
         data-testid="account-title"
       />
       <AvatarAndName />
-      <SettingRow name={t['com.affine.settings.email']()} desc={account.email}>
+      {/* <SettingRow name={t['com.affine.settings.email']()} desc={account.email}>
         <Button onClick={onChangeEmail}>
           {account.info?.emailVerified
             ? t['com.affine.settings.email.action.change']()
             : t['com.affine.settings.email.action.verify']()}
         </Button>
-      </SettingRow>
+      </SettingRow> */}
       <SettingRow
         name={t['com.affine.settings.password']()}
         desc={t['com.affine.settings.password.message']()}
@@ -239,10 +239,10 @@ export const AccountSetting = ({
             : t['com.affine.settings.password.action.set']()}
         </Button>
       </SettingRow>
-      <StoragePanel onChangeSettingState={onChangeSettingState} />
+      {/* <StoragePanel onChangeSettingState={onChangeSettingState} />
       {serverFeatures?.copilot && (
         <AIUsagePanel onChangeSettingState={onChangeSettingState} />
-      )}
+      )} */}
       <SettingRow
         name={t[`Sign out`]()}
         desc={t['com.affine.setting.sign.out.message']()}

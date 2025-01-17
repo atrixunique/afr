@@ -410,6 +410,9 @@ export class WorkspaceResolver {
         });
       }
 
+      console.log("invite "+user.id+" to "+workspaceId);
+      
+
       const inviteId = await this.permissions.grant(
         workspaceId,
         target.id,

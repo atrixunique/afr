@@ -90,7 +90,7 @@ export const Page = () => {
           onChange={handleDisplayDocInfoChange}
         />
       </SettingRow>
-      <SettingRow
+      {/* <SettingRow
         name={t[
           'com.affine.settings.editorSettings.page.display-bi-link.title'
         ]()}
@@ -103,7 +103,7 @@ export const Page = () => {
           checked={settings.displayBiDirectionalLink}
           onChange={handleDisplayBiDirectionalLinkChange}
         />
-      </SettingRow>
+      </SettingRow> */}
     </SettingWrapper>
   );
 };

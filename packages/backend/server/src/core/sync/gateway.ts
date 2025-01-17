@@ -273,6 +273,8 @@ export class SpaceSyncGateway
     const { spaceType, spaceId, docId, updates } = message;
     const adapter = this.selectAdapter(client, spaceType);
 
+    //console.log('push-doc-updates');
+
     // TODO(@forehalo): we might need to check write permission before push updates
     const timestamp = await adapter.push(
       spaceId,

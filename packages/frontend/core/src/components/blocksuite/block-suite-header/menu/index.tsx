@@ -307,7 +307,7 @@ export const PageHeaderMenuButton = ({
           {t['Rename']()}
         </MenuItem>
       )}
-      <MenuItem
+      {/* <MenuItem
         prefixIcon={primaryMode === 'page' ? <EdgelessIcon /> : <PageIcon />}
         data-testid="editor-option-menu-edgeless"
         onSelect={handleSwitchMode}
@@ -315,7 +315,7 @@ export const PageHeaderMenuButton = ({
         {primaryMode === 'page'
           ? t['com.affine.editorDefaultMode.edgeless']()
           : t['com.affine.editorDefaultMode.page']()}
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem
         data-testid="editor-option-menu-favorite"
         onSelect={handleToggleFavorite}
@@ -325,14 +325,14 @@ export const PageHeaderMenuButton = ({
           ? t['com.affine.favoritePageOperation.remove']()
           : t['com.affine.favoritePageOperation.add']()}
       </MenuItem>
-      <MenuSeparator />
+      {/* <MenuSeparator />
       <MenuItem
         prefixIcon={<OpenInNewIcon />}
         data-testid="editor-option-menu-open-in-new-tab"
         onSelect={handleOpenInNewTab}
       >
         {t['com.affine.workbench.tab.page-menu-open']()}
-      </MenuItem>
+      </MenuItem> */}
       {BUILD_CONFIG.isElectron && (
         <MenuItem
           prefixIcon={<SplitViewIcon />}
@@ -351,7 +351,7 @@ export const PageHeaderMenuButton = ({
       >
         {t['com.affine.page-properties.page-info.view']()}
       </MenuItem>
-      {currentMode === 'page' ? (
+      {/* {currentMode === 'page' ? (
         <MenuItem
           prefixIcon={<TocIcon />}
           data-testid="editor-option-toc"
@@ -367,16 +367,16 @@ export const PageHeaderMenuButton = ({
         >
           {t['com.affine.header.option.view-frame']()}
         </MenuItem>
-      )}
-      <MenuItem
+      )} */}
+      {/* <MenuItem
         prefixIcon={<HistoryIcon />}
         data-testid="editor-option-menu-history"
         onSelect={openHistoryModal}
       >
         {t['com.affine.history.view-history-version']()}
-      </MenuItem>
+      </MenuItem> */}
       <MenuSeparator />
-      {!isJournal && (
+      {/* {!isJournal && (
         <MenuItem
           prefixIcon={<DuplicateIcon />}
           data-testid="editor-option-menu-duplicate"
@@ -384,21 +384,21 @@ export const PageHeaderMenuButton = ({
         >
           {t['com.affine.header.option.duplicate']()}
         </MenuItem>
-      )}
-      <MenuItem
+      )} */}
+      {/* <MenuItem
         prefixIcon={<ImportIcon />}
         data-testid="editor-option-menu-import"
         onSelect={handleOpenImportModal}
       >
         {t['Import']()}
-      </MenuItem>
+      </MenuItem> */}
       <Export exportHandler={exportHandler} pageMode={currentMode} />
       <MenuSeparator />
       <MoveToTrash
         data-testid="editor-option-menu-delete"
         onSelect={handleOpenTrashModal}
       />
-      {BUILD_CONFIG.isWeb &&
+      {/* {BUILD_CONFIG.isWeb &&
       workspace.flavour === WorkspaceFlavour.AFFINE_CLOUD ? (
         <MenuItem
           prefixIcon={<LocalWorkspaceIcon />}
@@ -407,7 +407,7 @@ export const PageHeaderMenuButton = ({
         >
           {t['com.affine.header.option.open-in-desktop']()}
         </MenuItem>
-      ) : null}
+      ) : null} */}
     </>
   );
   if (isInTrash) {

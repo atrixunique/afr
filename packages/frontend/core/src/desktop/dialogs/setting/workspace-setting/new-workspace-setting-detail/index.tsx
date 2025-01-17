@@ -70,7 +70,7 @@ export const WorkspaceSettingDetail = ({
         <EnableCloudPanel onCloseSetting={onCloseSetting} />
         <MembersPanel onChangeSettingState={onChangeSettingState} />
       </SettingWrapper>
-      <SharingPanel />
+      {/* <SharingPanel />
       {BUILD_CONFIG.isElectron && (
         <SettingWrapper title={t['Storage and Export']()}>
           <DesktopExportPanel
@@ -78,10 +78,10 @@ export const WorkspaceSettingDetail = ({
             workspaceMetadata={workspaceMetadata}
           />
         </SettingWrapper>
-      )}
+      )} */}
       <SettingWrapper>
         <DeleteLeaveWorkspace onCloseSetting={onCloseSetting} />
-        <SettingRow
+        {/* <SettingRow
           name={
             <span style={{ color: 'var(--affine-text-secondary-color)' }}>
               {t['com.affine.resetSyncStatus.button']()}
@@ -93,7 +93,7 @@ export const WorkspaceSettingDetail = ({
           data-testid="reset-sync-status"
         >
           <ArrowRightSmallIcon />
-        </SettingRow>
+        </SettingRow> */}
       </SettingWrapper>
     </FrameworkScope>
   );

@@ -99,7 +99,7 @@ const useSyncEngineSyncProgress = (meta: WorkspaceMetadata) => {
   // TODO(@eyhn): add i18n
   if (workspace.flavour === WorkspaceFlavour.LOCAL) {
     if (!BUILD_CONFIG.isElectron) {
-      content = 'This is a local demo workspace.';
+      content = '本地临时存储 ';
     } else {
       content = 'Saved locally';
     }
@@ -111,10 +111,10 @@ const useSyncEngineSyncProgress = (meta: WorkspaceMetadata) => {
     content = 'Sync disconnected due to unexpected issues, reconnecting.';
   } else if (syncing) {
     content =
-      `Syncing with AFFiNE Cloud` +
+      `正在与远程服务器同步` +
       (progress ? ` (${Math.floor(progress * 100)}%)` : '');
   } else {
-    content = 'Synced with AFFiNE Cloud';
+    content = '已与远程服务器同步';
   }
 
   const CloudWorkspaceSyncStatus = () => {
@@ -321,7 +321,7 @@ export const WorkspaceCard = forwardRef<
                 className={styles.enableCloudButton}
                 onClick={onEnableCloud}
               >
-                Enable Cloud
+                远程同步
               </Button>
             ) : null}
             {hideCollaborationIcon || information?.isOwner ? null : (

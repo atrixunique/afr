@@ -34,8 +34,8 @@ export const WorkspaceAIOnboarding = () => {
 
   return (
     <Suspense>
-      {!enableAI || dismissGeneral ? null : <AIOnboardingGeneral />}
-      {!enableAI || dismissLocal ? null : <AIOnboardingLocal />}
+      {/* {!enableAI || dismissGeneral ? null : <AIOnboardingGeneral />}
+      {!enableAI || dismissLocal ? null : <AIOnboardingLocal />} */}
     </Suspense>
   );
 };

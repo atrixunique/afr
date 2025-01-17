@@ -28,7 +28,7 @@ export const ResetPasswordDialog = ({
           <DialogTitle className="leading-7">Account Recovery Link</DialogTitle>
           <DialogDescription className="leading-6">
             Please send this recovery link to the user and instruct them to
-            complete it.
+            complete it !
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

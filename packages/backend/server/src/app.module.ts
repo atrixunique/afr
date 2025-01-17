@@ -9,6 +9,7 @@ import { get } from 'lodash-es';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './core/auth';
+import { TransferModule } from './core/transfer';
 import { ADD_ENABLED_FEATURES, ServerConfigModule } from './core/config';
 import { DocStorageModule } from './core/doc';
 import { DocRendererModule } from './core/doc-renderer';
@@ -154,6 +155,9 @@ export function buildAppModule() {
 
     // auth
     .use(UserModule, AuthModule, PermissionModule)
+
+    // transfer
+    .use(TransferModule)
 
     // business modules
     .use(FeatureModule, QuotaModule, DocStorageModule)

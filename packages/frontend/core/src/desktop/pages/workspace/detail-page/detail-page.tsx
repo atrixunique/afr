@@ -111,18 +111,18 @@ const DetailPageImpl = memo(function DetailPageImpl() {
     }
   }, [editorContainer, isActiveView, setActiveBlockSuiteEditor]);
 
-  useEffect(() => {
-    const disposable = AIProvider.slots.requestOpenWithChat.on(params => {
-      workbench.openSidebar();
-      view.activeSidebarTab('chat');
+  // useEffect(() => {
+  //   const disposable = AIProvider.slots.requestOpenWithChat.on(params => {
+  //     workbench.openSidebar();
+  //     view.activeSidebarTab('chat');
 
-      if (chatPanelRef.current) {
-        const chatCards = chatPanelRef.current.querySelector('chat-cards');
-        if (chatCards) chatCards.temporaryParams = params;
-      }
-    });
-    return () => disposable.dispose();
-  }, [activeSidebarTab, view, workbench]);
+  //     if (chatPanelRef.current) {
+  //       const chatCards = chatPanelRef.current.querySelector('chat-cards');
+  //       if (chatCards) chatCards.temporaryParams = params;
+  //     }
+  //   });
+  //   return () => disposable.dispose();
+  // }, [activeSidebarTab, view, workbench]);
 
   useEffect(() => {
     if (isActiveView) {
@@ -291,15 +291,6 @@ const DetailPageImpl = memo(function DetailPageImpl() {
         </div>
       </ViewBody>
 
-      {enableAI && (
-        <ViewSidebarTab
-          tabId="chat"
-          icon={<AiIcon />}
-          unmountOnInactive={false}
-        >
-          <EditorChatPanel editor={editorContainer} ref={chatPanelRef} />
-        </ViewSidebarTab>
-      )}
 
       <ViewSidebarTab tabId="properties" icon={<PropertyIcon />}>
         <Scrollable.Root className={styles.sidebarScrollArea}>

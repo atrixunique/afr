@@ -7,6 +7,7 @@
   "workspaces": [
     ".",
     "packages/*/*",
+    "packages/*",
     "packages/frontend/apps/*",
     "tools/*",
     "docs/reference",
@@ -97,7 +98,7 @@
     "vite": "^5.2.8",
     "vitest": "2.1.4"
   },
-  "packageManager": "yarn@4.5.1",
+  "packageManager": "yarn@4.5.2",
   "resolutions": {
     "array-buffer-byte-length": "npm:@nolyfill/array-buffer-byte-length@latest",
     "array-includes": "npm:@nolyfill/array-includes@latest",
@@ -156,6 +157,23 @@
     "which-typed-array": "npm:@nolyfill/which-typed-array@latest",
     "@reforged/maker-appimage/@electron-forge/maker-base": "7.5.0",
     "macos-alias": "npm:@napi-rs/macos-alias@0.0.4",
-    "fs-xattr": "npm:@napi-rs/xattr@latest"
+    "fs-xattr": "npm:@napi-rs/xattr@latest",
+    "@blocksuite/affine": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/all",
+    "@blocksuite/affine-block-embed": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/block-embed",
+    "@blocksuite/affine-block-list": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/block-list",
+    "@blocksuite/affine-block-paragraph": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/block-paragraph",
+    "@blocksuite/affine-block-surface": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/block-surface",
+    "@blocksuite/affine-components": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/components",
+    "@blocksuite/data-view": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/data-view",
+    "@blocksuite/affine-model": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/model",
+    "@blocksuite/affine-shared": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/shared",
+    "@blocksuite/affine-widget-scroll-anchoring": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/affine/widget-scroll-anchoring",
+    "@blocksuite/blocks": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/blocks",
+    "@blocksuite/block-std": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/framework/block-std",
+    "@blocksuite/global": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/framework/global",
+    "@blocksuite/inline": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/framework/inline",
+    "@blocksuite/store": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/framework/store",
+    "@blocksuite/sync": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/framework/sync",
+    "@blocksuite/presets": "portal:/home/atrix/1123/AFFiNE/packages/blocksuite/packages/presets"
   }
 }

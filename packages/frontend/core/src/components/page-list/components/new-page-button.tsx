@@ -39,7 +39,7 @@ export const CreateNewPagePopup = ({
         onAuxClick={createNewPage}
         data-testid="new-page-button-in-all-page"
       />
-      <BlockCard
+      {/* <BlockCard
         title={t['com.affine.new_edgeless']()}
         desc={t['com.affine.draw_with_a_blank_whiteboard']()}
         right={<EdgelessIcon width={20} height={20} />}
@@ -55,7 +55,7 @@ export const CreateNewPagePopup = ({
           onClick={importFile}
           data-testid="import-button-in-all-page"
         />
-      ) : null}
+      ) : null} */}
       {/* TODO Import */}
     </div>
   );

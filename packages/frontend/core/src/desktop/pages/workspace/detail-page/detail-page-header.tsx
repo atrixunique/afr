@@ -65,7 +65,7 @@ export function JournalPageHeader({ page, workspace }: PageHeaderProps) {
     <Header className={styles.header} ref={containerRef}>
       <ViewTitle title={title} />
       <ViewIcon icon="journal" />
-      <EditorModeSwitch />
+      {/* <EditorModeSwitch /> */}
       <div className={styles.journalWeekPicker}>
         <JournalWeekDatePicker page={page} />
       </div>
@@ -76,9 +76,9 @@ export function JournalPageHeader({ page, workspace }: PageHeaderProps) {
         page={page}
         containerWidth={containerWidth}
       />
-      {page && !hideShare ? (
+      {/* {page && !hideShare ? (
         <SharePageButton workspace={workspace} page={page} />
-      ) : null}
+      ) : null} */}
     </Header>
   );
 }
@@ -114,7 +114,7 @@ export function NormalPageHeader({ page, workspace }: PageHeaderProps) {
     <Header className={styles.header} ref={containerRef}>
       <ViewTitle title={title} />
       <ViewIcon icon={currentMode ?? 'page'} />
-      <EditorModeSwitch />
+      {/* <EditorModeSwitch /> */}
       <BlocksuiteHeaderTitle
         docId={page.id}
         inputHandleRef={titleInputHandleRef}
@@ -137,9 +137,9 @@ export function NormalPageHeader({ page, workspace }: PageHeaderProps) {
 
       {!hidePresent ? <DetailPageHeaderPresentButton /> : null}
 
-      {page && !hideShare ? (
+      {/* {page && !hideShare ? (
         <SharePageButton workspace={workspace} page={page} />
-      ) : null}
+      ) : null} */}
 
       {showDivider ? (
         <Divider orientation="vertical" style={{ height: 20, marginLeft: 4 }} />

@@ -165,7 +165,7 @@ export const RootAppSidebar = memo((): ReactElement => {
           <AddPageButton />
         </div>
         <AllDocsButton />
-        <AppSidebarJournalButton />
+        {/* <AppSidebarJournalButton /> */}
         <MenuItem
           data-testid="slider-bar-workspace-setting-button"
           icon={<SettingsIcon />}
@@ -179,20 +179,20 @@ export const RootAppSidebar = memo((): ReactElement => {
       <SidebarScrollableContainer>
         <ExplorerFavorites />
         <ExplorerOrganize />
-        <ExplorerMigrationFavorites />
-        <ExplorerCollections />
-        <ExplorerTags />
-        <CategoryDivider label={t['com.affine.rootAppSidebar.others']()} />
+        {/* <ExplorerMigrationFavorites /> */}
+        {/* <ExplorerCollections />
+        <ExplorerTags /> */}
+        {/* <CategoryDivider label={t['com.affine.rootAppSidebar.others']()} /> */}
         <div style={{ padding: '0 8px' }}>
           <TrashButton />
-          <MenuItem
+          {/* <MenuItem
             data-testid="slider-bar-import-button"
             icon={<ImportIcon />}
             onClick={onOpenImportModal}
           >
             <span data-testid="import-modal-trigger">{t['Import']()}</span>
-          </MenuItem>
-          <ExternalMenuLinkItem
+          </MenuItem> */}
+          {/* <ExternalMenuLinkItem
             href="https://affine.pro/blog?tag=Release+Note"
             icon={<JournalIcon />}
             label={t['com.affine.app-sidebar.learn-more']()}
@@ -201,12 +201,13 @@ export const RootAppSidebar = memo((): ReactElement => {
             href="https://github.com/toeverything/affine"
             icon={<GithubIcon />}
             label={t['com.affine.app-sidebar.star-us']()}
-          />
+          /> */}
         </div>
       </SidebarScrollableContainer>
-      <SidebarContainer>
-        {BUILD_CONFIG.isElectron ? <UpdaterButton /> : <AppDownloadButton />}
-      </SidebarContainer>
+      { <SidebarContainer>
+        {/* {BUILD_CONFIG.isElectron ? <UpdaterButton /> : <AppDownloadButton />} */}
+        Meno Notion Web
+      </SidebarContainer> }
     </AppSidebar>
   );
 });

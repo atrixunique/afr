@@ -39,100 +39,100 @@ export function registerAffineNavigationCommands({
     })
   );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:goto-collection-list',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: 'Go to Collection List',
-      run() {
-        track.$.cmdk.navigation.navigate({
-          to: 'collectionList',
-        });
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:goto-collection-list',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: 'Go to Collection List',
+  //     run() {
+  //       track.$.cmdk.navigation.navigate({
+  //         to: 'collectionList',
+  //       });
 
-        navigationHelper.jumpToCollections(docCollection.id);
-      },
-    })
-  );
+  //       navigationHelper.jumpToCollections(docCollection.id);
+  //     },
+  //   })
+  // );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:goto-tag-list',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: 'Go to Tag List',
-      run() {
-        track.$.cmdk.navigation.navigate({
-          to: 'tagList',
-        });
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:goto-tag-list',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: 'Go to Tag List',
+  //     run() {
+  //       track.$.cmdk.navigation.navigate({
+  //         to: 'tagList',
+  //       });
 
-        navigationHelper.jumpToTags(docCollection.id);
-      },
-    })
-  );
+  //       navigationHelper.jumpToTags(docCollection.id);
+  //     },
+  //   })
+  // );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:goto-workspace',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: t['com.affine.cmdk.affine.navigation.goto-workspace'](),
-      run() {
-        track.$.cmdk.navigation.navigate({
-          to: 'workspace',
-        });
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:goto-workspace',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: t['com.affine.cmdk.affine.navigation.goto-workspace'](),
+  //     run() {
+  //       track.$.cmdk.navigation.navigate({
+  //         to: 'workspace',
+  //       });
 
-        store.set(openWorkspaceListModalAtom, true);
-      },
-    })
-  );
+  //       store.set(openWorkspaceListModalAtom, true);
+  //     },
+  //   })
+  // );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:open-settings',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: t['com.affine.cmdk.affine.navigation.open-settings'](),
-      keyBinding: '$mod+,',
-      run() {
-        track.$.cmdk.settings.openSettings();
-        globalDialogService.open('setting', {
-          activeTab: 'appearance',
-        });
-      },
-    })
-  );
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:open-settings',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: t['com.affine.cmdk.affine.navigation.open-settings'](),
+  //     keyBinding: '$mod+,',
+  //     run() {
+  //       track.$.cmdk.settings.openSettings();
+  //       globalDialogService.open('setting', {
+  //         activeTab: 'appearance',
+  //       });
+  //     },
+  //   })
+  // );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:open-account',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: t['com.affine.cmdk.affine.navigation.open-account-settings'](),
-      run() {
-        track.$.cmdk.settings.openSettings({ to: 'account' });
-        globalDialogService.open('setting', {
-          activeTab: 'account',
-        });
-      },
-    })
-  );
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:open-account',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: t['com.affine.cmdk.affine.navigation.open-account-settings'](),
+  //     run() {
+  //       track.$.cmdk.settings.openSettings({ to: 'account' });
+  //       globalDialogService.open('setting', {
+  //         activeTab: 'account',
+  //       });
+  //     },
+  //   })
+  // );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:goto-trash',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: t['com.affine.cmdk.affine.navigation.goto-trash'](),
-      run() {
-        track.$.cmdk.navigation.navigate({
-          to: 'trash',
-        });
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:goto-trash',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: t['com.affine.cmdk.affine.navigation.goto-trash'](),
+  //     run() {
+  //       track.$.cmdk.navigation.navigate({
+  //         to: 'trash',
+  //       });
 
-        navigationHelper.jumpToPage(docCollection.id, 'trash');
-      },
-    })
-  );
+  //       navigationHelper.jumpToPage(docCollection.id, 'trash');
+  //     },
+  //   })
+  // );
 
   return () => {
     unsubs.forEach(unsub => unsub());

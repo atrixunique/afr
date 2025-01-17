@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "lib",
     "typeRoots": ["../../../node_modules", "../../../node_modules/@types"],
-    "types": ["webpack-env", "ses", "affine__env"]
+    "types": ["webpack-env", "ses", "affine__env"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json"],
   "exclude": ["node_modules"],

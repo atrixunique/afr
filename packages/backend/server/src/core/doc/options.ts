@@ -47,6 +47,8 @@ export class DocStorageOptions implements IDocStorageOptions {
       'doc/experimentalMergeWithYOcto'
     );
 
+    //useYocto is false
+
     if (useYocto) {
       metrics.jwst.counter('codec_merge_counter').add(1);
       let log = false;

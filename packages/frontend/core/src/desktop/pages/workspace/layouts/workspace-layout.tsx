@@ -43,7 +43,7 @@ export const WorkspaceLayout = function WorkspaceLayout({
       <WorkspaceLayoutInner>{children}</WorkspaceLayoutInner>
       {/* should show after workspace loaded */}
       <WorkspaceAIOnboarding />
-      <AIIsland />
+      {/* <AIIsland /> */}
     </SWRConfigProvider>
   );
 };

@@ -10,6 +10,7 @@ import type {
   PageEditor,
 } from '@blocksuite/affine/presets';
 import { type BlockModel, type Doc, Slot } from '@blocksuite/affine/store';
+import type { DatabaseBlockModel, DatabaseBlockSchema} from '@blocksuite/affine-model';
 import clsx from 'clsx';
 import type React from 'react';
 import {
@@ -134,6 +135,13 @@ export const BlocksuiteEditorContainer = forwardRef<
   ]);
 
   const handleClickPageModeBlank = useCallback(() => {
+
+    // page.getBlocksByFlavour("affine:database").forEach((b) => {
+    //   const database=b.model as DatabaseBlockModel;
+    //   console.log(database.schema as DatabaseBlockSchema);  
+    //   console.log(database.title.toString()); 
+    // });
+
     if (shared || page.readonly) return;
     const std = affineEditorContainerProxy.host?.std;
     if (!std) {

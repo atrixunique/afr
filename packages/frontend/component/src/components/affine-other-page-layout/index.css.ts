@@ -8,6 +8,7 @@ export const root = style({
   fontSize: cssVar('fontBase'),
   position: 'relative',
   background: cssVar('backgroundPrimaryColor'),
+  backgroundSize: 'cover',
 });
 export const affineLogo = style({
   color: 'inherit',

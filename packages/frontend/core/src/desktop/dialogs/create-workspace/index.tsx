@@ -120,11 +120,11 @@ const NameWorkspaceContent = ({
         />
       </div>
       <div className={styles.affineCloudWrapper}>
-        <div className={styles.subTitle}>{t['AFFiNE Cloud']()}</div>
+        <div className={styles.subTitle}>{'远程同步'}</div>
         <div className={styles.card}>
           <div className={styles.cardText}>
             <div className={styles.cardTitle}>
-              <span>{t['com.affine.nameWorkspace.affine-cloud.title']()}</span>
+            <span>{'使用远程同步'}</span>
               <Switch
                 checked={enable}
                 onChange={onSwitchChange}
@@ -132,7 +132,7 @@ const NameWorkspaceContent = ({
               />
             </div>
             <div className={styles.cardDescription}>
-              {t['com.affine.nameWorkspace.affine-cloud.description']()}
+              {'启用远程同步可以让您同步和备份数据，并支持多用户协作和内容分享。'}
             </div>
           </div>
           <div className={styles.cloudSvgContainer}>

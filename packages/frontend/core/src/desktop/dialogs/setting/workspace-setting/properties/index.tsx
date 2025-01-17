@@ -68,7 +68,7 @@ export const WorkspaceSettingProperties = ({
           </Trans>
         }
       />
-      <WorkspaceSettingPropertiesMain />
+      {/* <WorkspaceSettingPropertiesMain /> */}
     </FrameworkScope>
   );
 };

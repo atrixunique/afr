@@ -112,7 +112,8 @@ export const SignIn: FC<AuthPanelProps<'signIn'>> = ({
     <>
       <ModalHeader
         title={t['com.affine.auth.sign.in']()}
-        subTitle={t['com.affine.brand.affineCloud']()}
+        // subTitle={t['com.affine.brand.affineCloud']()}
+        subTitle={'Memo Notion 1.0'}
       />
 
       <OAuth redirectUrl={redirectUrl} />
@@ -140,7 +141,8 @@ export const SignIn: FC<AuthPanelProps<'signIn'>> = ({
             suffixStyle={{ width: 20, height: 20, color: cssVar('blue') }}
             onClick={onContinue}
           >
-            {t['com.affine.auth.sign.email.continue']()}
+            {/* {t['com.affine.auth.sign.email.continue']()} */}
+            {'继续登录'}
           </Button>
         ) : (
           <Captcha />
@@ -150,14 +152,15 @@ export const SignIn: FC<AuthPanelProps<'signIn'>> = ({
 
         <div className={style.authMessage}>
           {/*prettier-ignore*/}
-          <Trans i18nKey="com.affine.auth.sign.message">
+          {/* <Trans i18nKey="com.affine.auth.sign.message">
               By clicking &quot;Continue with Google/Email&quot; above, you acknowledge that
               you agree to AFFiNE&apos;s <a href="https://affine.pro/terms" target="_blank" rel="noreferrer">Terms of Conditions</a> and <a href="https://affine.pro/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>.
-          </Trans>
+          </Trans> */}
+                    Memo Notion 1.0
         </div>
       </div>
 
-      {onSkip ? (
+      {/* {onSkip ? (
         <>
           <div className={style.skipDivider}>
             <div className={style.skipDividerLine} />
@@ -178,7 +181,7 @@ export const SignIn: FC<AuthPanelProps<'signIn'>> = ({
             </Button>
           </div>
         </>
-      ) : null}
+      ) : null} */}
     </>
   );
 };

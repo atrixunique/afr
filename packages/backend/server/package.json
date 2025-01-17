@@ -148,7 +148,7 @@
       "MAILER_PASSWORD": "affine",
       "MAILER_SENDER": "noreply@toeverything.info",
       "FEATURES_EARLY_ACCESS_PREVIEW": "false",
-      "DEPLOYMENT_TYPE": "affine"
+      "DEPLOYMENT_TYPE": "Selfhosted"
     }
   },
   "nodemonConfig": {

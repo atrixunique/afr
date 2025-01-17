@@ -124,7 +124,7 @@ const CloudUsage = () => {
 
   if (percent === null) {
     if (quotaError) {
-      return <ErrorMessage>Failed to load quota</ErrorMessage>;
+      return <ErrorMessage>超级用户</ErrorMessage>;
     }
     return (
       <div>

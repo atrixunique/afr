@@ -20,7 +20,7 @@ export const AffineOtherPageLayout = ({
 
   return (
     <div className={styles.root}>
-      {BUILD_CONFIG.isElectron ? (
+      {/* {BUILD_CONFIG.isElectron ? (
         <div className={styles.draggableHeader} />
       ) : (
         <div className={styles.topNav}>
@@ -37,7 +37,7 @@ export const AffineOtherPageLayout = ({
           </Button>
           <MobileNavbar />
         </div>
-      )}
+      )} */}
 
       {children}
     </div>

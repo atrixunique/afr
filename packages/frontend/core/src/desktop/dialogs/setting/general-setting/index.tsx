@@ -68,18 +68,18 @@ export const useGeneralSettingList = (): GeneralSettingList => {
       icon: AppearanceIcon,
       testId: 'appearance-panel-trigger',
     },
-    {
-      key: 'shortcuts',
-      title: t['com.affine.keyboardShortcuts.title'](),
-      icon: KeyboardIcon,
-      testId: 'shortcuts-panel-trigger',
-    },
-    {
-      key: 'about',
-      title: t['com.affine.aboutAFFiNE.title'](),
-      icon: InformationIcon,
-      testId: 'about-panel-trigger',
-    },
+    // {
+    //   key: 'shortcuts',
+    //   title: t['com.affine.keyboardShortcuts.title'](),
+    //   icon: KeyboardIcon,
+    //   testId: 'shortcuts-panel-trigger',
+    // },
+    // {
+    //   key: 'about',
+    //   title: t['com.affine.aboutAFFiNE.title'](),
+    //   icon: InformationIcon,
+    //   testId: 'about-panel-trigger',
+    // },
   ];
   if (enableEditorSettings) {
     // add editor settings to second position
@@ -91,29 +91,29 @@ export const useGeneralSettingList = (): GeneralSettingList => {
     });
   }
 
-  if (hasPaymentFeature) {
-    settings.splice(3, 0, {
-      key: 'plans',
-      title: t['com.affine.payment.title'](),
-      icon: UpgradeIcon,
-      testId: 'plans-panel-trigger',
-    });
-    if (status === 'authenticated') {
-      settings.splice(3, 0, {
-        key: 'billing',
-        title: t['com.affine.payment.billing-setting.title'](),
-        icon: PaymentIcon,
-        testId: 'billing-panel-trigger',
-      });
-    }
-  }
+  // if (hasPaymentFeature) {
+  //   settings.splice(3, 0, {
+  //     key: 'plans',
+  //     title: t['com.affine.payment.title'](),
+  //     icon: UpgradeIcon,
+  //     testId: 'plans-panel-trigger',
+  //   });
+  //   if (status === 'authenticated') {
+  //     settings.splice(3, 0, {
+  //       key: 'billing',
+  //       title: t['com.affine.payment.billing-setting.title'](),
+  //       icon: PaymentIcon,
+  //       testId: 'billing-panel-trigger',
+  //     });
+  //   }
+  // }
 
-  settings.push({
-    key: 'experimental-features',
-    title: t['com.affine.settings.workspace.experimental-features'](),
-    icon: ExperimentIcon,
-    testId: 'experimental-features-trigger',
-  });
+  // settings.push({
+  //   key: 'experimental-features',
+  //   title: t['com.affine.settings.workspace.experimental-features'](),
+  //   icon: ExperimentIcon,
+  //   testId: 'experimental-features-trigger',
+  // });
 
   return settings;
 };
