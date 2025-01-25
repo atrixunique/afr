@@ -10,6 +10,7 @@ export {
 } from '../app-updater-button/index.css';
 export const rootPadding = style({
   padding: '0 24px',
+  marginBottom: '30px',
 });
 export const label = style({
   display: 'flex',

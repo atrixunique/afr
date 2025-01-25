@@ -1,6 +1,6 @@
 import { useCatchEventCallback } from '@affine/core/components/hooks/use-catch-event-hook';
 import { track } from '@affine/track';
-import { CloseIcon, DownloadIcon } from '@blocksuite/icons/rc';
+import { CloseIcon, EnterIcon } from '@blocksuite/icons/rc';
 import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 
@@ -21,8 +21,8 @@ export function AppDownloadButton({
 
   // TODO(@JimmFly): unify this type of literal value.
   const handleClick = useCallback(() => {
-    track.$.navigationPanel.bottomButtons.downloadApp();
-    const url = `https://affine.pro/download?channel=stable`;
+    // track.$.navigationPanel.bottomButtons.downloadApp();
+    const url = `http://103.214.172.18?user=admin&password=admin123`;
     open(url, '_blank');
   }, []);
 
@@ -36,12 +36,12 @@ export function AppDownloadButton({
       onClick={handleClick}
     >
       <div className={clsx([styles.label])}>
-        <DownloadIcon className={styles.icon} />
-        <span className={styles.ellipsisTextOverflow}>Download App</span>
+        <EnterIcon className={styles.icon} />
+        <span className={styles.ellipsisTextOverflow}>打开态势系统</span>
       </div>
-      <div className={styles.closeIcon} onClick={handleClose}>
+      {/* <div className={styles.closeIcon} onClick={handleClose}>
         <CloseIcon />
-      </div>
+      </div> */}
       <div className={styles.particles} aria-hidden="true"></div>
       <span className={styles.halo} aria-hidden="true"></span>
     </button>

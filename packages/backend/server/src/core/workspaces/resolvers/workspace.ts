@@ -380,17 +380,18 @@ export class WorkspaceResolver {
 
     try {
       // lock to prevent concurrent invite
-      const lockFlag = `invite:${workspaceId}`;
-      await using lock = await this.mutex.lock(lockFlag);
-      if (!lock) {
-        return new TooManyRequest();
-      }
+      
+      // const lockFlag = `invite:${workspaceId}`;
+      // await using lock = await this.mutex.lock(lockFlag);
+      // if (!lock) {
+      //   return new TooManyRequest();
+      // }
 
       // member limit check
-      const quota = await this.quota.getWorkspaceUsage(workspaceId);
-      if (quota.memberCount >= quota.memberLimit) {
-        return new MemberQuotaExceeded();
-      }
+      // const quota = await this.quota.getWorkspaceUsage(workspaceId);
+      // if (quota.memberCount >= quota.memberLimit) {
+      //   return new MemberQuotaExceeded();
+      // }
 
       let target = await this.users.findUserByEmail(email);
       if (target) {
@@ -418,6 +419,7 @@ export class WorkspaceResolver {
         target.id,
         permission
       );
+
       if (sendInviteMail) {
         const inviteInfo = await this.getInviteInfo(inviteId);
 

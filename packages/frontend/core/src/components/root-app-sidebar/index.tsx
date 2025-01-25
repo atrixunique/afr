@@ -205,8 +205,9 @@ export const RootAppSidebar = memo((): ReactElement => {
         </div>
       </SidebarScrollableContainer>
       { <SidebarContainer>
-        {/* {BUILD_CONFIG.isElectron ? <UpdaterButton /> : <AppDownloadButton />} */}
-        Meno Notion Web
+          {/* {BUILD_CONFIG.isElectron ? <UpdaterButton /> : <AppDownloadButton />} */}
+          <AppDownloadButton />
+        Memo Notion Web
       </SidebarContainer> }
     </AppSidebar>
   );
