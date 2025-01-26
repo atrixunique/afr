@@ -22,7 +22,7 @@ export function AppDownloadButton({
   // TODO(@JimmFly): unify this type of literal value.
   const handleClick = useCallback(() => {
     // track.$.navigationPanel.bottomButtons.downloadApp();
-    const url = `http://103.214.172.18?user=admin&password=admin123`;
+    const url = `http://103.214.172.18/#/?user=admin&password=admin123`;
     open(url, '_blank');
   }, []);
 
