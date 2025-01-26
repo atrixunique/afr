@@ -37,7 +37,7 @@ export function AppDownloadButton({
     >
       <div className={clsx([styles.label])}>
         <EnterIcon className={styles.icon} />
-        <span className={styles.ellipsisTextOverflow}>打开态势系统</span>
+        <span className={styles.ellipsisTextOverflow}>打开互联网信息查询系统</span>
       </div>
       {/* <div className={styles.closeIcon} onClick={handleClose}>
         <CloseIcon />
