@@ -39,21 +39,21 @@ export function registerAffineNavigationCommands({
     })
   );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:goto-collection-list',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: 'Go to Collection List',
-      run() {
-        track.$.cmdk.navigation.navigate({
-          to: 'collectionList',
-        });
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:goto-collection-list',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: 'Go to Collection List',
+  //     run() {
+  //       track.$.cmdk.navigation.navigate({
+  //         to: 'collectionList',
+  //       });
 
-        navigationHelper.jumpToCollections(docCollection.id);
-      },
-    })
-  );
+  //       navigationHelper.jumpToCollections(docCollection.id);
+  //     },
+  //   })
+  // );
 
   unsubs.push(
     registerAffineCommand({
@@ -87,36 +87,36 @@ export function registerAffineNavigationCommands({
     })
   );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:open-settings',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: t['com.affine.cmdk.affine.navigation.open-settings'](),
-      keyBinding: '$mod+,',
-      run() {
-        track.$.cmdk.settings.openSettings();
-        workspaceDialogService.open('setting', {
-          activeTab: 'appearance',
-        });
-      },
-    })
-  );
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:open-settings',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: t['com.affine.cmdk.affine.navigation.open-settings'](),
+  //     keyBinding: '$mod+,',
+  //     run() {
+  //       track.$.cmdk.settings.openSettings();
+  //       workspaceDialogService.open('setting', {
+  //         activeTab: 'appearance',
+  //       });
+  //     },
+  //   })
+  // );
 
-  unsubs.push(
-    registerAffineCommand({
-      id: 'affine:open-account',
-      category: 'affine:navigation',
-      icon: <ArrowRightBigIcon />,
-      label: t['com.affine.cmdk.affine.navigation.open-account-settings'](),
-      run() {
-        track.$.cmdk.settings.openSettings({ to: 'account' });
-        workspaceDialogService.open('setting', {
-          activeTab: 'account',
-        });
-      },
-    })
-  );
+  // unsubs.push(
+  //   registerAffineCommand({
+  //     id: 'affine:open-account',
+  //     category: 'affine:navigation',
+  //     icon: <ArrowRightBigIcon />,
+  //     label: t['com.affine.cmdk.affine.navigation.open-account-settings'](),
+  //     run() {
+  //       track.$.cmdk.settings.openSettings({ to: 'account' });
+  //       workspaceDialogService.open('setting', {
+  //         activeTab: 'account',
+  //       });
+  //     },
+  //   })
+  // );
 
   unsubs.push(
     registerAffineCommand({

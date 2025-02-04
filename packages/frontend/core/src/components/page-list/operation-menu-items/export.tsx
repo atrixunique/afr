@@ -97,13 +97,13 @@ export const ExportMenuItems = ({
         icon={<ExportToMarkdownIcon />}
         label={t['Export to Markdown']()}
       />
-      <ExportMenuItem
+      {/* <ExportMenuItem
         onSelect={() => exportHandler('snapshot')}
         className={className}
         type="snapshot"
         icon={<PageIcon />}
         label={t['Export to Snapshot']()}
-      />
+      /> */}
     </>
   );
 };

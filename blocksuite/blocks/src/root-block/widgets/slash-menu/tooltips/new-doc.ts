@@ -7,7 +7,7 @@ export const NewDocTooltip = html`<svg width="170" height="68" viewBox="0 0 170 
 </mask>
 <g mask="url(#mask0_16460_991)">
 <text fill="#8E8D91" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="22" font-weight="600" letter-spacing="0px"><tspan x="8" y="27.5">Title</tspan></text>
-<text fill="#8E8D91" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="10" letter-spacing="0px"><tspan x="8" y="44.6364">Type &#39;/&#39; for commands</tspan></text>
+<text fill="#8E8D91" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="10" letter-spacing="0px"><tspan x="8" y="44.6364">Type &#39;/&#39; 以开始</tspan></text>
 </g>
 </svg>
 `;

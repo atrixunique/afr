@@ -151,7 +151,7 @@ class AIParagraphBlockWatcher extends BlockServiceWatcher {
     assertInstanceOf(service, ParagraphBlockService);
     service.placeholderGenerator = model => {
       if (model.type === 'text') {
-        return "Type '/' for commands, 'space' for AI";
+        return "键入 '/' 以开始";
       }
 
       const placeholders = {

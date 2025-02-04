@@ -8,7 +8,7 @@ import type { SelectPropertyData } from '../select/define.js';
 export const multiSelectPropertyType = propertyType('multi-select');
 export const multiSelectPropertyModelConfig =
   multiSelectPropertyType.modelConfig<string[], SelectPropertyData>({
-    name: 'Multi-select',
+    name: '多标签',
     type: ({ data }) => t.array.instance(t.tag.instance(data.options)),
     defaultData: () => ({
       options: [],

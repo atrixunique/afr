@@ -158,7 +158,7 @@ export const RootAppSidebar = memo((): ReactElement => {
           <AddPageButton />
         </div>
         <AllDocsButton />
-        <AppSidebarJournalButton />
+        {/* <AppSidebarJournalButton /> */}
         <MenuItem
           data-testid="slider-bar-workspace-setting-button"
           icon={<SettingsIcon />}
@@ -173,27 +173,27 @@ export const RootAppSidebar = memo((): ReactElement => {
         <ExplorerFavorites />
         <ExplorerOrganize />
         <ExplorerMigrationFavorites />
-        <ExplorerCollections />
-        <ExplorerTags />
+        {/* <ExplorerCollections />
+        <ExplorerTags /> */}
         <CollapsibleSection
           name="others"
           title={t['com.affine.rootAppSidebar.others']()}
           contentStyle={{ padding: '6px 8px 0 8px' }}
         >
           <TrashButton />
-          <MenuItem
+          {/* <MenuItem
             data-testid="slider-bar-import-button"
             icon={<ImportIcon />}
             onClick={onOpenImportModal}
           >
             <span data-testid="import-modal-trigger">{t['Import']()}</span>
-          </MenuItem>
-          <TemplateDocEntrance />
+          </MenuItem> */}
+          {/* <TemplateDocEntrance />
           <ExternalMenuLinkItem
             href="https://affine.pro/blog?tag=Release+Note"
             icon={<JournalIcon />}
             label={t['com.affine.app-sidebar.learn-more']()}
-          />
+          /> */}
         </CollapsibleSection>
       </SidebarScrollableContainer>
       <SidebarContainer>

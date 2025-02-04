@@ -13,6 +13,7 @@ const {
   numberPropertyConfig,
   progressPropertyConfig,
   selectPropertyConfig,
+  dataRefPropertyConfig,
 } = propertyPresets;
 export const databaseBlockColumns = {
   checkboxColumnConfig: checkboxPropertyConfig,
@@ -25,6 +26,7 @@ export const databaseBlockColumns = {
   linkColumnConfig,
   richTextColumnConfig,
   titleColumnConfig,
+  dataRefPropertyConfig,
 };
 export const databaseBlockPropertyList = Object.values(databaseBlockColumns);
 export const databaseBlockAllPropertyMap = Object.fromEntries(

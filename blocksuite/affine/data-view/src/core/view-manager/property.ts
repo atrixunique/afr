@@ -40,6 +40,9 @@ export interface Property<
   readonly name$: ReadonlySignal<string>;
   nameSet(name: string): void;
 
+  readonly dataRef$: ReadonlySignal<string>;
+  dataRefSet(dataRef: string): void;
+
   readonly hide$: ReadonlySignal<boolean>;
   hideSet(hide: boolean): void;
   get hideCanSet(): boolean;
@@ -74,6 +77,10 @@ export abstract class PropertyBase<
 
   name$ = computed(() => {
     return this.view.propertyNameGet(this.id);
+  });
+
+  dataRef$ = computed(() => {
+    return this.view.propertyDataRefGet(this.id);
   });
 
   readonly$ = computed(() => {
@@ -161,6 +168,10 @@ export abstract class PropertyBase<
     this.view.propertyNameSet(this.id, name);
   }
 
+  dataRefSet(dataRef: string): void {
+    this.view.propertyDataRefSet(this.id, dataRef);
+  }
+  
   stringValueGet(rowId: string): string {
     return this.cellGet(rowId).stringValue$.value;
   }

@@ -105,7 +105,7 @@ export class NoteRenderer
           @click="${this.addNote}"
           style="max-width: var(--affine-editor-width);margin: auto;cursor: pointer;color: var(--affine-text-disable-color)"
         >
-          Click to create a linked doc in center peek.
+          点击这里以创建一个新文档.
         </div>
       </div>`;
     }

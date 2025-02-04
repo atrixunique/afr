@@ -77,6 +77,7 @@ export class MenuSubMenu extends MenuFocusable {
     const unsub = autoUpdate(this, menu.menuElement, () => {
       computePosition(this, menu.menuElement, {
         middleware: subMenuMiddleware,
+        placement: 'left-end',
       })
         .then(({ x, y }) => {
           menu.menuElement.style.left = `${x}px`;

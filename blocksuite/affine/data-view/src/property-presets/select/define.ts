@@ -13,7 +13,7 @@ export const selectPropertyModelConfig = selectPropertyType.modelConfig<
   string,
   SelectPropertyData
 >({
-  name: 'Select',
+  name: '单标签',
   type: ({ data }) => t.tag.instance(data.options),
   defaultData: () => ({
     options: [],

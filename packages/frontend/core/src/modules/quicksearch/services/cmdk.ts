@@ -31,11 +31,11 @@ export class CMDKQuickSearchService extends Service {
       this.quickSearchService.quickSearch.show(
         [
           this.framework.createEntity(RecentDocsQuickSearchSession),
-          this.framework.createEntity(CollectionsQuickSearchSession),
-          this.framework.createEntity(CommandsQuickSearchSession),
-          this.framework.createEntity(CreationQuickSearchSession),
+          // this.framework.createEntity(CollectionsQuickSearchSession),
+          // this.framework.createEntity(CommandsQuickSearchSession),
+          // this.framework.createEntity(CreationQuickSearchSession),
           this.framework.createEntity(DocsQuickSearchSession),
-          this.framework.createEntity(LinksQuickSearchSession),
+          // this.framework.createEntity(LinksQuickSearchSession),
           this.framework.createEntity(TagsQuickSearchSession),
         ],
         result => {

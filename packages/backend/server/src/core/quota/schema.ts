@@ -34,7 +34,7 @@ export const Quotas: Quota[] = [
       // history period of validity 30 days
       historyPeriod: 30 * OneDay,
       // member limit 10
-      memberLimit: 10,
+      memberLimit: 99
     },
   },
   {
@@ -51,7 +51,7 @@ export const Quotas: Quota[] = [
       // history period of validity 30 days
       historyPeriod: 30 * OneDay,
       // member limit 10
-      memberLimit: 10,
+      memberLimit: 99,
     },
   },
   {
@@ -131,7 +131,7 @@ export const Quotas: Quota[] = [
       // history period of validity 30 days
       historyPeriod: 30 * OneDay,
       // member limit 10
-      memberLimit: 10,
+      memberLimit: 99,
       // copilot action limit 10
       copilotActionLimit: 10,
     },
@@ -150,7 +150,7 @@ export const Quotas: Quota[] = [
       // history period of validity 30 days
       historyPeriod: 30 * OneDay,
       // member limit 10
-      memberLimit: 10,
+      memberLimit: 99,
       // copilot action limit 10
       copilotActionLimit: 10,
     },
@@ -169,7 +169,7 @@ export const Quotas: Quota[] = [
       // history period of validity 30 days
       historyPeriod: 30 * OneDay,
       // member limit 10
-      memberLimit: 10,
+      memberLimit: 99,
       // copilot action limit 10
       copilotActionLimit: 10,
     },

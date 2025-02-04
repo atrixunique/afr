@@ -271,7 +271,8 @@ export class TableGroup extends SignalWatcher(
               data-test-id="affine-database-add-row-button"
               role="button"
             >
-              ${PlusIcon()}<span style="font-size: 12px">New Record</span>
+              <!-- ${PlusIcon()}<span style="font-size: 12px">New Record</span> -->
+                ${PlusIcon()}<span>新增记录</span>
             </div>
           </div>`}
       <affine-database-column-stats .view="${this.view}" .group="${this.group}">

@@ -47,6 +47,7 @@ export class TableSingleView extends SingleViewBase<TableViewData> {
         hide: column.hide$.value,
         width: column.width$.value,
         statCalcType: column.statCalcOp$.value,
+        dataRef:column.dataRef$.value,
       };
     });
   });

@@ -157,17 +157,17 @@ export function NormalPageHeader({ page, workspace }: PageHeaderProps) {
     <Header className={styles.header} ref={containerRef}>
       <ViewTitle title={title} />
       <ViewIcon icon={currentMode ?? 'page'} />
-      <EditorModeSwitch />
+      {/* <EditorModeSwitch /> */}
       <BlocksuiteHeaderTitle
         docId={page.id}
         inputHandleRef={titleInputHandleRef}
       />
-      <TemplateMark />
+      {/* <TemplateMark /> */}
       <div className={styles.iconButtonContainer}>
         {hideCollect ? null : (
           <>
             <FavoriteButton pageId={page?.id} />
-            <InfoButton docId={page.id} />
+            {/* <InfoButton docId={page.id} /> */}
           </>
         )}
         <PageHeaderMenuButton
@@ -181,9 +181,9 @@ export function NormalPageHeader({ page, workspace }: PageHeaderProps) {
 
       {!hidePresent ? <DetailPageHeaderPresentButton /> : null}
 
-      {page && !hideShare ? (
+      {/* {page && !hideShare ? (
         <SharePageButton workspace={workspace} page={page} />
-      ) : null}
+      ) : null} */}
 
       {showDivider ? (
         <Divider orientation="vertical" style={{ height: 20, marginLeft: 4 }} />

@@ -184,9 +184,9 @@ export const CloudWorkspaceMembersPanel = ({
             className={styles.goUpgradeWrapper}
             onClick={handleUpgradeConfirm}
           >
-            <span className={styles.goUpgrade}>
+            {/* <span className={styles.goUpgrade}>
               {t['com.affine.payment.member.description.choose-plan']()}
-            </span>
+            </span> */}
           </div>
         ) : null}
       </span>

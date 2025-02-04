@@ -11,9 +11,13 @@ import { NumberGroupView } from './core/group-by/renderer/number-group.js';
 import { SelectGroupView } from './core/group-by/renderer/select-group.js';
 import { StringGroupView } from './core/group-by/renderer/string-group.js';
 import { GroupSetting } from './core/group-by/setting.js';
-import { AffineLitIcon, UniAnyRender, UniLit } from './core/index.js';
+import { AffineLitIcon, UniAnyRender, UniLit, DataRefSelect, DataRefView} from './core/index.js';
 import { AnyRender } from './core/utils/uni-component/render-template.js';
 import { CheckboxCell } from './property-presets/checkbox/cell-renderer.js';
+import {
+  DataRefCell,
+  DataRefCellEditing,
+} from './property-presets/data-ref/cell-renderer.js';
 import {
   DateCell,
   DateCellEditing,
@@ -120,6 +124,12 @@ export function effects() {
     'affine-database-multi-select-cell-editing',
     MultiSelectCellEditing
   );
+  customElements.define('affine-database-data-ref-cell', DataRefCell);
+  customElements.define(
+    'affine-database-data-ref-cell-editing',
+    DataRefCellEditing
+  );
+
   customElements.define('affine-data-view-record-field', RecordField);
   customElements.define('data-view-drag-to-fill', DragToFillElement);
   customElements.define('affine-data-view-table-group', TableGroup);
@@ -146,6 +156,8 @@ export function effects() {
   customElements.define('affine-database-table', DataViewTable);
   customElements.define('mobile-data-view-table', MobileDataViewTable);
   customElements.define('affine-multi-tag-view', MultiTagView);
+  customElements.define('affine-data-ref-view', DataRefView);
+  customElements.define('affine-data-ref-select', DataRefSelect);
   customElements.define(
     'data-view-header-tools-search',
     DataViewHeaderToolsSearch

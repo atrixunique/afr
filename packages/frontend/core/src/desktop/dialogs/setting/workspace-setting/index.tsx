@@ -64,30 +64,30 @@ export const useWorkspaceSettingList = (): SettingSidebarItem[] => {
         icon: <SettingsIcon />,
         testId: 'workspace-setting:preference',
       },
-      {
-        key: 'workspace:properties',
-        title: t['com.affine.settings.workspace.properties'](),
-        icon: <PropertyIcon />,
-        testId: 'workspace-setting:properties',
-      },
+      // {
+      //   key: 'workspace:properties',
+      //   title: t['com.affine.settings.workspace.properties'](),
+      //   icon: <PropertyIcon />,
+      //   testId: 'workspace-setting:properties',
+      // },
       {
         key: 'workspace:members',
         title: t['Members'](),
         icon: <CollaborationIcon />,
         testId: 'workspace-setting:members',
       },
-      {
-        key: 'workspace:storage',
-        title: t['Storage'](),
-        icon: <SaveIcon />,
-        testId: 'workspace-setting:storage',
-      },
-      showBilling && {
-        key: 'workspace:billing' as SettingTab,
-        title: t['com.affine.settings.workspace.billing'](),
-        icon: <PaymentIcon />,
-        testId: 'workspace-setting:billing',
-      },
+      // {
+      //   key: 'workspace:storage',
+      //   title: t['Storage'](),
+      //   icon: <SaveIcon />,
+      //   testId: 'workspace-setting:storage',
+      // },
+      // showBilling && {
+      //   key: 'workspace:billing' as SettingTab,
+      //   title: t['com.affine.settings.workspace.billing'](),
+      //   icon: <PaymentIcon />,
+      //   testId: 'workspace-setting:billing',
+      // },
 
       // todo(@pengx17): add selfhost's team license
     ].filter((item): item is SettingSidebarItem => !!item);

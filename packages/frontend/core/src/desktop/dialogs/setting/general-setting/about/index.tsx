@@ -76,7 +76,7 @@ export const AboutAffine = () => {
           name={t['com.affine.aboutAFFiNE.version.editor.title']()}
           desc={BUILD_CONFIG.editorVersion}
         />
-        {BUILD_CONFIG.isElectron ? (
+        {/* {BUILD_CONFIG.isElectron ? (
           <>
             <UpdateCheckSection />
             <SettingRow
@@ -110,8 +110,8 @@ export const AboutAffine = () => {
               <ArrowRightSmallIcon />
             </SettingRow>
           </>
-        ) : null}
-        <SettingRow
+        ) : null} */}
+        {/* <SettingRow
           name={t['com.affine.telemetry.enable']()}
           desc={t['com.affine.telemetry.enable.desc']()}
         >
@@ -119,9 +119,9 @@ export const AboutAffine = () => {
             checked={appSettings.enableTelemetry !== false}
             onChange={onSwitchTelemetry}
           />
-        </SettingRow>
+        </SettingRow> */}
       </SettingWrapper>
-      <SettingWrapper title={t['com.affine.aboutAFFiNE.contact.title']()}>
+      {/* <SettingWrapper title={t['com.affine.aboutAFFiNE.contact.title']()}>
         <a
           className={styles.link}
           rel="noreferrer"
@@ -178,7 +178,7 @@ export const AboutAffine = () => {
           {t['com.affine.aboutAFFiNE.legal.tos']()}
           <OpenInNewIcon className="icon" />
         </a>
-      </SettingWrapper>
+      </SettingWrapper> */}
     </>
   );
 };

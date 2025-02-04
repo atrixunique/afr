@@ -14,7 +14,7 @@ export const AFFINE_FLAGS = {
       'com.affine.settings.workspace.experimental-features.enable-ai.description',
     hide: true,
     configurable: true,
-    defaultState: true,
+    defaultState: false,
   },
   enable_ai_network_search: {
     category: 'affine',

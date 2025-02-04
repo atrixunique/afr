@@ -14,9 +14,9 @@ export async function buildShowcaseWorkspace(
   const meta = await workspacesService.create(flavour, async docCollection => {
     docCollection.meta.initialize();
     docCollection.meta.setName(workspaceName);
-    const blob = await (await fetch(onboardingUrl)).blob();
+    // const blob = await (await fetch(onboardingUrl)).blob();
 
-    await ZipTransformer.importDocs(docCollection, blob);
+    // await ZipTransformer.importDocs(docCollection, blob);
   });
 
   const { workspace, dispose } = workspacesService.open({ metadata: meta });
@@ -26,12 +26,13 @@ export async function buildShowcaseWorkspace(
   const docsService = workspace.scope.get(DocsService);
 
   // should jump to "Write, Draw, Plan all at Once." in edgeless by default
-  const defaultDoc = docsService.list.docs$.value.find(p =>
-    p.title$.value.startsWith('Write, Draw, Plan all at Once.')
-  );
+  // const defaultDoc = docsService.list.docs$.value.find(p =>
+  //   p.title$.value.startsWith('Write, Draw, Plan all at Once.')
+  // );
+  const defaultDoc = docsService.createDoc();
 
   if (defaultDoc) {
-    defaultDoc.setPrimaryMode('edgeless');
+    defaultDoc.setPrimaryMode('page');
   }
 
   dispose();

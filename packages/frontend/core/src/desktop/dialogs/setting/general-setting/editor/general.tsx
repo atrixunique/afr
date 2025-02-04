@@ -492,10 +492,10 @@ export const General = () => {
 
   return (
     <SettingWrapper title={t['com.affine.settings.editorSettings.general']()}>
-      <AISettings />
+      {/* <AISettings /> */}
       <FontFamilySettings />
       <CustomFontFamilySettings />
-      <NewDocDefaultModeSettings />
+      {/* <NewDocDefaultModeSettings /> */}
       {BUILD_CONFIG.isElectron && <SpellCheckSettings />}
       {/* // TODO(@akumatus): implement these settings
         <DeFaultCodeBlockSettings />

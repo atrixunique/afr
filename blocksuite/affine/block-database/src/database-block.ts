@@ -4,7 +4,7 @@ import {
   popMenu,
   popupTargetFromElement,
 } from '@blocksuite/affine-components/context-menu';
-import { DragIndicator } from '@blocksuite/affine-components/drag-indicator';
+import { DropIndicator } from '@blocksuite/affine-components/drop-indicator';
 import { PeekViewProvider } from '@blocksuite/affine-components/peek';
 import { toast } from '@blocksuite/affine-components/toast';
 import type { DatabaseBlockModel } from '@blocksuite/affine-model';
@@ -113,19 +113,19 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
             this.model.title.replace(0, this.model.title.length, text);
           },
         }),
-        menu.action({
-          prefix: CopyIcon(),
-          name: 'Copy',
-          select: () => {
-            const slice = Slice.fromModels(this.doc, [this.model]);
-            this.std.clipboard
-              .copySlice(slice)
-              .then(() => {
-                toast(this.host, 'Copied to clipboard');
-              })
-              .catch(console.error);
-          },
-        }),
+        // menu.action({
+        //   prefix: CopyIcon(),
+        //   name: 'Copy',
+        //   select: () => {
+        //     const slice = Slice.fromModels(this.doc, [this.model]);
+        //     this.std.clipboard
+        //       .copySlice(slice)
+        //       .then(() => {
+        //         toast(this.host, 'Copied to clipboard');
+        //       })
+        //       .catch(console.error);
+        //   },
+        // }),
         menu.group({
           items: [
             menu.action({
@@ -214,7 +214,7 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
   headerWidget: DataViewWidget = defineUniComponent(
     (props: DataViewWidgetProps) => {
       return html`
-        <div style="margin-bottom: 16px;display:flex;flex-direction: column">
+                <div style="margin-bottom: 16px;display:flex;flex-direction: row">
           <div
             style="display:flex;gap:12px;margin-bottom: 8px;align-items: center"
           >
@@ -222,16 +222,16 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
             ${this.renderDatabaseOps()}
           </div>
           <div
-            style="display:flex;align-items:center;justify-content: space-between;gap: 12px"
+            style="display:flex;align-items:center;justify-content: space-between;gap: 12px;margin-left:auto"
             class="database-header-bar"
           >
             <div style="flex:1">
-              ${renderUniLit(widgetPresets.viewBar, {
+              <!-- ${renderUniLit(widgetPresets.viewBar, {
                 ...props,
                 onChangeView: id => {
                   currentViewStorage.setCurrentView(this.blockId, id);
                 },
-              })}
+              })} -->
             </div>
             ${renderUniLit(this.toolsWidget, props)}
           </div>
@@ -241,7 +241,7 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
     }
   );
 
-  indicator = new DragIndicator();
+  indicator = new DropIndicator();
 
   onDrag = (evt: MouseEvent, id: string): (() => void) => {
     const result = getDropResult(evt);
@@ -302,14 +302,14 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
       widgetPresets.tools.filter,
       widgetPresets.tools.sort,
       widgetPresets.tools.search,
-      widgetPresets.tools.viewOptions,
+      // widgetPresets.tools.viewOptions,
       widgetPresets.tools.tableAddRow,
     ],
     kanban: [
       widgetPresets.tools.filter,
       widgetPresets.tools.sort,
       widgetPresets.tools.search,
-      widgetPresets.tools.viewOptions,
+      // widgetPresets.tools.viewOptions,
       widgetPresets.tools.tableAddRow,
     ],
   });

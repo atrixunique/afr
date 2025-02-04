@@ -79,14 +79,14 @@ export class OpenInAppService extends Service {
 
   getOpenLinkMode() {
     return (
-      this.globalState.get<OpenLinkMode>(storageKey) ?? OpenLinkMode.ALWAYS_ASK
+      this.globalState.get<OpenLinkMode>(storageKey) ?? OpenLinkMode.OPEN_IN_WEB
     );
   }
 
   openLinkMode$ = LiveData.from(
     this.globalState.watch<OpenLinkMode>(storageKey),
     this.getOpenLinkMode()
-  ).map(v => v ?? OpenLinkMode.ALWAYS_ASK);
+  ).map(v => v ?? OpenLinkMode.OPEN_IN_WEB);
 
   setOpenLinkMode(mode: OpenLinkMode) {
     this.globalState.set(storageKey, mode);

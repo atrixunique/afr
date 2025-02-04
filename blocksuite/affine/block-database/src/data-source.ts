@@ -3,6 +3,7 @@ import type {
   ColumnUpdater,
   DatabaseBlockModel,
 } from '@blocksuite/affine-model';
+import { getSelectedModelsCommand } from '@blocksuite/affine-shared/commands';
 import { FeatureFlagService } from '@blocksuite/affine-shared/services';
 import {
   insertPositionToIndex,
@@ -373,6 +374,21 @@ export class DatabaseBlockDataSource extends DataSourceBase {
     return false;
   }
 
+  propertyDataRefGet(propertyId: string): string {
+    if (propertyId === 'type') {
+      return 'Ref Type';
+    }
+    return (
+      this._model.columns$.value.find(v => v.id === propertyId)?.dataRef ?? ''
+    );
+  }
+
+  propertyDataRefSet(propertyId: string, dataRef: string): void {
+    this.doc.captureSync();
+    updateProperty(this._model, propertyId, () => ({ dataRef }));
+    applyPropertyUpdate(this._model);
+  }
+  
   propertyTypeGet(propertyId: string): string {
     if (propertyId === 'type') {
       return 'image';
@@ -517,12 +533,9 @@ export const databaseViewInitTemplate = (
   datasource.viewManager.viewAdd(viewType);
 };
 export const convertToDatabase = (host: EditorHost, viewType: string) => {
-  const [_, ctx] = host.std.command
-    .chain()
-    .getSelectedModels({
-      types: ['block', 'text'],
-    })
-    .run();
+  const [_, ctx] = host.std.command.exec(getSelectedModelsCommand, {
+    types: ['block', 'text'],
+  });
   const { selectedModels } = ctx;
   const firstModel = selectedModels?.[0];
   if (!firstModel) return;

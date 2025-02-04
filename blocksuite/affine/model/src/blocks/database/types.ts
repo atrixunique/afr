@@ -4,6 +4,7 @@ export interface Column<
   id: string;
   type: string;
   name: string;
+  dataRef: string;
   data: Data;
 }
 

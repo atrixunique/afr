@@ -74,13 +74,13 @@ export const AllPageHeader = ({
 
   return (
     <Header
-      left={
-        <AllPageListOperationsMenu
-          filterList={filters}
-          onChangeFilterList={onChangeFilters}
-          propertiesMeta={workspace.docCollection.meta.properties}
-        />
-      }
+      // left={
+      //   <AllPageListOperationsMenu
+      //     filterList={filters}
+      //     onChangeFilterList={onChangeFilters}
+      //     propertiesMeta={workspace.docCollection.meta.properties}
+      //   />
+      // }
       right={
         <>
           <PageListNewPageButton

@@ -18,10 +18,10 @@
 const env = process.env;
 
 AFFiNE.serverName = AFFiNE.affine.canary
-  ? 'AFFiNE Canary Cloud'
+  ? 'Memo Notion'
   : AFFiNE.affine.beta
-    ? 'AFFiNE Beta Cloud'
-    : 'AFFiNE Cloud';
+    ? 'Memo Notion Cloud'
+    : 'Memo Notion Beta';
 AFFiNE.metrics.enabled = !AFFiNE.node.test;
 
 if (env.R2_OBJECT_STORAGE_ACCOUNT_ID) {

@@ -9,7 +9,7 @@ export class ParagraphBlockService extends BlockService {
 
   placeholderGenerator: (model: ParagraphBlockModel) => string = model => {
     if (model.type === 'text') {
-      return "Type '/' for commands";
+      return "键入 '/' 以开始";
     }
 
     const placeholders = {

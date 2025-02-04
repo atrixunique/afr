@@ -1,10 +1,14 @@
+import { autoResizeElementsCommand } from '@blocksuite/affine-block-surface';
 import { toast } from '@blocksuite/affine-components/toast';
 import type {
   AttachmentBlockProps,
   ImageBlockModel,
   ImageBlockProps,
 } from '@blocksuite/affine-model';
-import { NativeClipboardProvider } from '@blocksuite/affine-shared/services';
+import {
+  FileSizeLimitService,
+  NativeClipboardProvider,
+} from '@blocksuite/affine-shared/services';
 import {
   downloadBlob,
   humanFileSize,
@@ -429,15 +433,9 @@ export async function addImages(
   const imageFiles = [...files].filter(file => file.type.startsWith('image/'));
   if (!imageFiles.length) return [];
 
-  const imageService = std.getService('affine:image');
   const gfx = std.get(GfxControllerIdentifier);
 
-  if (!imageService) {
-    console.error('Image service not found');
-    return [];
-  }
-
-  const maxFileSize = imageService.maxFileSize;
+  const maxFileSize = std.store.get(FileSizeLimitService).maxFileSize;
   const isSizeExceeded = imageFiles.some(file => file.size > maxFileSize);
   if (isSizeExceeded) {
     toast(
@@ -516,7 +514,7 @@ export async function addImages(
     editing: false,
   });
   if (isMultipleFiles) {
-    std.command.exec('autoResizeElements');
+    std.command.exec(autoResizeElementsCommand);
   }
   return blockIds;
 }

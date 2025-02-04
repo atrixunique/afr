@@ -19,10 +19,33 @@ export const styles = css`
     gap: 4px;
   }
 
+
+  affine-data-ref-select {
+    position: absolute;
+    z-index: 2;
+    color: ${unsafeCSSVarV2('text/primary')};
+    border: 0.5px solid ${unsafeCSSVarV2('layer/insideBorder/blackBorder')};
+    border-radius: 8px;
+    background: ${unsafeCSSVarV2('layer/background/primary')};
+    box-shadow: ${unsafeCSSVar('overlayPanelShadow')};
+    font-family: var(--affine-font-family);
+    max-width: 400px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+
   @media print {
     affine-multi-tag-select {
       display: none;
     }
+
+    affine-data-ref-select {
+      display: none;
+    }
+
   }
 
   .tag-select-input-container {
@@ -62,7 +85,7 @@ export const styles = css`
     overflow-y: auto;
     user-select: none;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 4px;
   }
 
@@ -77,6 +100,8 @@ export const styles = css`
 
   .tag-container {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
     padding: 0 8px;
     gap: 4px;
@@ -96,7 +121,7 @@ export const styles = css`
   }
 
   .tag-delete-icon {
-    display: flex;
+    /* display: flex; */
     align-items: center;
     color: ${unsafeCSSVarV2('chip/label/text')};
   }

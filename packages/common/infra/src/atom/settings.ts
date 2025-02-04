@@ -27,9 +27,9 @@ const appSettingBaseAtom = atomWithStorage<AppSetting>('affine-settings', {
   windowFrameStyle: 'frameless',
   enableBlurBackground: true,
   enableNoisyBackground: true,
-  autoCheckUpdate: true,
-  autoDownloadUpdate: true,
-  enableTelemetry: true,
+  autoCheckUpdate: false,
+  autoDownloadUpdate: false,
+  enableTelemetry: false,
 });
 
 type SetStateAction<Value> = Value | ((prev: Value) => Value);

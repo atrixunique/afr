@@ -55,12 +55,12 @@ export const WorkspaceModeFilterTab = ({
             testId: 'workspace-docs-button',
             className: styles.filterTab,
           },
-          {
-            value: 'collections',
-            label: t['com.affine.collections.header'](),
-            testId: 'workspace-collections-button',
-            className: styles.filterTab,
-          },
+          // {
+          //   value: 'collections',
+          //   label: t['com.affine.collections.header'](),
+          //   testId: 'workspace-collections-button',
+          //   className: styles.filterTab,
+          // },
           {
             value: 'tags',
             label: t['Tags'](),

@@ -8,7 +8,7 @@ import { Navigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { isAdmin, useCurrentUser, useRevalidateCurrentUser } from '../common';
-import logo from './logo.svg';
+import logo from './logo.png';
 
 export function Auth() {
   const currentUser = useCurrentUser();
@@ -33,7 +33,7 @@ export function Auth() {
         .then(async response => {
           if (!response.ok) {
             const data = await response.json();
-            throw new Error(data.message || 'Failed to login');
+            throw new Error(data.message || '登录失败');
           }
           return response.json();
         })
@@ -58,7 +58,7 @@ export function Auth() {
             },
           }) => {
             if (features.includes(FeatureType.Admin)) {
-              toast.success('Logged in successfully');
+              toast.success('登录成功');
               await revalidate();
             } else {
               toast.error('You are not an admin');
@@ -66,7 +66,7 @@ export function Auth() {
           }
         )
         .catch(err => {
-          toast.error(`Failed to login: ${err.message}`);
+          toast.error(`登录失败: ${err.message}`);
         });
     },
     [revalidate]
@@ -83,7 +83,7 @@ export function Auth() {
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Login</h1>
             <p className="text-balance text-muted-foreground">
-              Enter your email below to login to your account
+              请输入 Email 以登录
             </p>
           </div>
           <form onSubmit={login} action="#">
@@ -94,7 +94,7 @@ export function Auth() {
                   id="email"
                   type="email"
                   ref={emailRef}
-                  placeholder="m@example.com"
+                  placeholder="mn@mn.com"
                   autoComplete="email"
                   required
                 />
@@ -112,7 +112,7 @@ export function Auth() {
                 />
               </div>
               <Button onClick={login} type="submit" className="w-full">
-                Login
+                登录
               </Button>
             </div>
           </form>
@@ -122,7 +122,7 @@ export function Auth() {
         <img
           src={logo}
           alt="Image"
-          className="h-1/2 object-cover dark:brightness-[0.2] dark:grayscale relative top-1/4 "
+          className="h-1/2 dark:brightness-[0.2] dark:grayscale relative top-1/4 "
         />
       </div>
     </div>

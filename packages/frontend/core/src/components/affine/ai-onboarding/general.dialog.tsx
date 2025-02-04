@@ -97,7 +97,7 @@ export const AIOnboardingGeneral = () => {
   const list = useMemo(() => getPlayList(t), [t]);
   const workspaceDialogService = useService(WorkspaceDialogService);
   const readyToOpen = isLoggedIn;
-  useBlurRoot(open && readyToOpen);
+  // useBlurRoot(open && readyToOpen);
 
   const isFirst = index === 0;
   const isLast = index === list.length - 1;
@@ -176,121 +176,123 @@ export const AIOnboardingGeneral = () => {
     prevVideoRef.current = video;
   }, [index]);
 
-  return readyToOpen ? (
-    <Modal
-      persistent
-      open={open}
-      onOpenChange={v => {
-        showAIOnboardingGeneral$.next(v);
-        if (!v) toggleGeneralAIOnboarding(false);
-      }}
-      contentOptions={{ className: styles.dialog }}
-      overlayOptions={{ className: baseStyles.dialogOverlay }}
-    >
-      <div className={styles.dialogContent}>
-        <Slider<PlayListItem>
-          rootRef={videoWrapperRef}
-          className={styles.videoHeader}
-          items={list}
-          activeIndex={index}
-          preload={5}
-          itemRenderer={videoRenderer}
-        />
+  return null;
+  
+  // return readyToOpen ? (
+  //   <Modal
+  //     persistent
+  //     open={open}
+  //     onOpenChange={v => {
+  //       showAIOnboardingGeneral$.next(v);
+  //       if (!v) toggleGeneralAIOnboarding(false);
+  //     }}
+  //     contentOptions={{ className: styles.dialog }}
+  //     overlayOptions={{ className: baseStyles.dialogOverlay }}
+  //   >
+  //     <div className={styles.dialogContent}>
+  //       <Slider<PlayListItem>
+  //         rootRef={videoWrapperRef}
+  //         className={styles.videoHeader}
+  //         items={list}
+  //         activeIndex={index}
+  //         preload={5}
+  //         itemRenderer={videoRenderer}
+  //       />
 
-        <main className={styles.mainContent}>
-          <Slider<PlayListItem>
-            items={list}
-            activeIndex={index}
-            itemRenderer={titleRenderer}
-            transitionDuration={400}
-          />
-          <Slider<PlayListItem>
-            items={list}
-            activeIndex={index}
-            itemRenderer={descriptionRenderer}
-            transitionDuration={500}
-            preload={5}
-          />
-        </main>
+  //       <main className={styles.mainContent}>
+  //         <Slider<PlayListItem>
+  //           items={list}
+  //           activeIndex={index}
+  //           itemRenderer={titleRenderer}
+  //           transitionDuration={400}
+  //         />
+  //         <Slider<PlayListItem>
+  //           items={list}
+  //           activeIndex={index}
+  //           itemRenderer={descriptionRenderer}
+  //           transitionDuration={500}
+  //           preload={5}
+  //         />
+  //       </main>
 
-        <section
-          className={styles.privacy}
-          aria-hidden={!isLast || !!aiSubscription}
-        >
-          <Trans
-            i18nKey="com.affine.ai-onboarding.general.privacy"
-            components={{
-              a: (
-                <a
-                  className={styles.privacyLink}
-                  href="https://affine.pro/terms#ai"
-                />
-              ),
-            }}
-          />
-        </section>
+  //       <section
+  //         className={styles.privacy}
+  //         aria-hidden={!isLast || !!aiSubscription}
+  //       >
+  //         <Trans
+  //           i18nKey="com.affine.ai-onboarding.general.privacy"
+  //           components={{
+  //             a: (
+  //               <a
+  //                 className={styles.privacyLink}
+  //                 href="https://affine.pro/terms#ai"
+  //               />
+  //             ),
+  //           }}
+  //         />
+  //       </section>
 
-        <footer
-          className={styles.footer}
-          data-is-last={isLast}
-          data-is-first={isFirst}
-        >
-          {isLast ? (
-            <>
-              <IconButton size="20" onClick={onPrev}>
-                <ArrowLeftSmallIcon />
-              </IconButton>
-              {aiSubscription ? (
-                <Button
-                  size="large"
-                  onClick={closeAndDismiss}
-                  variant="primary"
-                >
-                  {t['com.affine.ai-onboarding.general.get-started']()}
-                </Button>
-              ) : (
-                <div className={styles.subscribeActions}>
-                  <Button size="large" onClick={goToPricingPlans}>
-                    {t['com.affine.ai-onboarding.general.purchase']()}
-                  </Button>
-                  <Button
-                    size="large"
-                    onClick={closeAndDismiss}
-                    variant="primary"
-                  >
-                    {t['com.affine.ai-onboarding.general.try-for-free']()}
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              {isFirst ? (
-                <Button onClick={remindLater} size="large">
-                  {t['com.affine.ai-onboarding.general.skip']()}
-                </Button>
-              ) : (
-                <Button
-                  prefix={<ArrowLeftSmallIcon />}
-                  onClick={onPrev}
-                  size="large"
-                  variant="plain"
-                >
-                  {t['com.affine.ai-onboarding.general.prev']()}
-                </Button>
-              )}
-              <div className={styles.actionAndIndicator}>
-                <div>
-                  {index + 1} / {list.length}
-                </div>
-                <Button size="large" variant="primary" onClick={onNext}>
-                  {t['com.affine.ai-onboarding.general.next']()}
-                </Button>
-              </div>
-            </>
-          )}
-        </footer>
-      </div>
-    </Modal>
-  ) : null;
+  //       <footer
+  //         className={styles.footer}
+  //         data-is-last={isLast}
+  //         data-is-first={isFirst}
+  //       >
+  //         {isLast ? (
+  //           <>
+  //             <IconButton size="20" onClick={onPrev}>
+  //               <ArrowLeftSmallIcon />
+  //             </IconButton>
+  //             {aiSubscription ? (
+  //               <Button
+  //                 size="large"
+  //                 onClick={closeAndDismiss}
+  //                 variant="primary"
+  //               >
+  //                 {t['com.affine.ai-onboarding.general.get-started']()}
+  //               </Button>
+  //             ) : (
+  //               <div className={styles.subscribeActions}>
+  //                 <Button size="large" onClick={goToPricingPlans}>
+  //                   {t['com.affine.ai-onboarding.general.purchase']()}
+  //                 </Button>
+  //                 <Button
+  //                   size="large"
+  //                   onClick={closeAndDismiss}
+  //                   variant="primary"
+  //                 >
+  //                   {t['com.affine.ai-onboarding.general.try-for-free']()}
+  //                 </Button>
+  //               </div>
+  //             )}
+  //           </>
+  //         ) : (
+  //           <>
+  //             {isFirst ? (
+  //               <Button onClick={remindLater} size="large">
+  //                 {t['com.affine.ai-onboarding.general.skip']()}
+  //               </Button>
+  //             ) : (
+  //               <Button
+  //                 prefix={<ArrowLeftSmallIcon />}
+  //                 onClick={onPrev}
+  //                 size="large"
+  //                 variant="plain"
+  //               >
+  //                 {t['com.affine.ai-onboarding.general.prev']()}
+  //               </Button>
+  //             )}
+  //             <div className={styles.actionAndIndicator}>
+  //               <div>
+  //                 {index + 1} / {list.length}
+  //               </div>
+  //               <Button size="large" variant="primary" onClick={onNext}>
+  //                 {t['com.affine.ai-onboarding.general.next']()}
+  //               </Button>
+  //             </div>
+  //           </>
+  //         )}
+  //       </footer>
+  //     </div>
+  //   </Modal>
+  // ) : null;
 };

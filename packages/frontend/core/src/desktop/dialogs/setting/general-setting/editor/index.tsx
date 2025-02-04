@@ -16,7 +16,7 @@ export const EditorSettings = () => {
       />
       <General />
       <Page />
-      <Edgeless />
+      {/* <Edgeless /> */}
 
       {/* // TODO(@EYHN): implement export and import
        <Preferences /> */}

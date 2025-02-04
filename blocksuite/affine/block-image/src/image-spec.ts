@@ -1,6 +1,5 @@
 import {
   BlockViewExtension,
-  CommandExtension,
   FlavourExtension,
   WidgetViewMapExtension,
 } from '@blocksuite/block-std';
@@ -8,13 +7,12 @@ import type { ExtensionType } from '@blocksuite/store';
 import { literal } from 'lit/static-html.js';
 
 import { ImageBlockAdapterExtensions } from './adapters/extension.js';
-import { commands } from './commands/index.js';
+import { ImageProxyService } from './image-proxy-service.js';
 import { ImageBlockService, ImageDropOption } from './image-service.js';
 
 export const ImageBlockSpec: ExtensionType[] = [
   FlavourExtension('affine:image'),
   ImageBlockService,
-  CommandExtension(commands),
   BlockViewExtension('affine:image', model => {
     const parent = model.doc.getParent(model.id);
 
@@ -30,3 +28,5 @@ export const ImageBlockSpec: ExtensionType[] = [
   ImageDropOption,
   ImageBlockAdapterExtensions,
 ].flat();
+
+export const ImageStoreSpec: ExtensionType[] = [ImageProxyService].flat();

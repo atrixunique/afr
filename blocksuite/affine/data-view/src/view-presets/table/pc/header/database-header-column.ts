@@ -23,6 +23,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { html } from 'lit/static-html.js';
+import type { DatabaseBlockModel } from '@blocksuite/affine-model';
 
 import {
   inputConfig,
@@ -43,6 +44,7 @@ import type { NumberPropertyDataType } from '../../../../property-presets/index.
 import { numberFormats } from '../../../../property-presets/number/utils/formats.js';
 import { ShowQuickSettingBarContextKey } from '../../../../widget-presets/quick-setting-bar/context.js';
 import { DEFAULT_COLUMN_TITLE_HEIGHT } from '../../consts.js';
+import { getAffineDatabase, getTableContainer } from '../../types.js';
 import type { TableColumn, TableSingleView } from '../../table-view-manager.js';
 import {
   getTableGroupRect,
@@ -211,70 +213,70 @@ export class DatabaseHeaderColumn extends SignalWatcher(
           inputConfig(this.column),
           typeConfig(this.column),
           // Number format begin
-          ...(enableNumberFormatting
-            ? [
-                menu.subMenu({
-                  name: 'Number Format',
-                  hide: () =>
-                    !this.column.dataUpdate ||
-                    this.column.type$.value !== 'number',
-                  options: {
-                    items: [
-                      numberFormatConfig(this.column),
-                      ...numberFormats.map(format => {
-                        const data = (
-                          this.column as Property<
-                            number,
-                            NumberPropertyDataType
-                          >
-                        ).data$.value;
-                        return menu.action({
-                          isSelected: data.format === format.type,
-                          prefix: html`<span
-                            style="font-size: var(--affine-font-base); scale: 1.2;"
-                            >${format.symbol}</span
-                          >`,
-                          name: format.label,
-                          select: () => {
-                            if (data.format === format.type) return;
-                            this.column.dataUpdate(() => ({
-                              format: format.type,
-                            }));
-                          },
-                        });
-                      }),
-                    ],
-                  },
-                }),
-              ]
-            : []),
+          // ...(enableNumberFormatting
+          //   ? [
+          //       menu.subMenu({
+          //         name: 'Number Format',
+          //         hide: () =>
+          //           !this.column.dataUpdate ||
+          //           this.column.type$.value !== 'number',
+          //         options: {
+          //           items: [
+          //             numberFormatConfig(this.column),
+          //             ...numberFormats.map(format => {
+          //               const data = (
+          //                 this.column as Property<
+          //                   number,
+          //                   NumberPropertyDataType
+          //                 >
+          //               ).data$.value;
+          //               return menu.action({
+          //                 isSelected: data.format === format.type,
+          //                 prefix: html`<span
+          //                   style="font-size: var(--affine-font-base); scale: 1.2;"
+          //                   >${format.symbol}</span
+          //                 >`,
+          //                 name: format.label,
+          //                 select: () => {
+          //                   if (data.format === format.type) return;
+          //                   this.column.dataUpdate(() => ({
+          //                     format: format.type,
+          //                   }));
+          //                 },
+          //               });
+          //             }),
+          //           ],
+          //         },
+          //       }),
+          //     ]
+          //   : []),
           // Number format end
+          // menu.group({
+          //   items: [
+          //     menu.action({
+          //       name: 'Hide In View',
+          //       prefix: ViewIcon(),
+          //       hide: () => !this.column.hideCanSet,
+          //       select: () => {
+          //         this.column.hideSet(true);
+          //       },
+          //     }),
+          //   ],
+          // }),
           menu.group({
             items: [
               menu.action({
-                name: 'Hide In View',
-                prefix: ViewIcon(),
-                hide: () => !this.column.hideCanSet,
-                select: () => {
-                  this.column.hideSet(true);
-                },
-              }),
-            ],
-          }),
-          menu.group({
-            items: [
-              menu.action({
-                name: 'Filter',
+                name: '过滤',
                 prefix: FilterIcon(),
                 select: () => this._addFilter(),
               }),
               menu.action({
-                name: 'Sort Ascending',
+                name: '升序排序',
                 prefix: SortIcon(),
                 select: () => this._addSort(false),
               }),
               menu.action({
-                name: 'Sort Descending',
+                name: '降序排序',
                 prefix: SortIcon(),
                 select: () => this._addSort(true),
               }),
@@ -283,7 +285,7 @@ export class DatabaseHeaderColumn extends SignalWatcher(
           menu.group({
             items: [
               menu.action({
-                name: 'Insert Left Column',
+                name: '在左边插入列',
                 prefix: InsertLeftIcon(),
                 select: () => {
                   this.tableViewManager.propertyAdd({
@@ -306,7 +308,7 @@ export class DatabaseHeaderColumn extends SignalWatcher(
                 },
               }),
               menu.action({
-                name: 'Insert Right Column',
+                name: '在右边插入列',
                 prefix: InsertRightIcon(),
                 select: () => {
                   this.tableViewManager.propertyAdd({
@@ -328,7 +330,7 @@ export class DatabaseHeaderColumn extends SignalWatcher(
                 },
               }),
               menu.action({
-                name: 'Move Left',
+                name: '左移',
                 prefix: MoveLeftIcon(),
                 hide: () => this.column.isFirst,
                 select: () => {
@@ -345,7 +347,7 @@ export class DatabaseHeaderColumn extends SignalWatcher(
                 },
               }),
               menu.action({
-                name: 'Move Right',
+                name: '右移',
                 prefix: MoveRightIcon(),
                 hide: () => this.column.isLast,
                 select: () => {
@@ -366,7 +368,7 @@ export class DatabaseHeaderColumn extends SignalWatcher(
           menu.group({
             items: [
               menu.action({
-                name: 'Duplicate',
+                name: '复制列',
                 prefix: DuplicateIcon(),
                 hide: () => !this.column.canDuplicate,
                 select: () => {
@@ -374,7 +376,7 @@ export class DatabaseHeaderColumn extends SignalWatcher(
                 },
               }),
               menu.action({
-                name: 'Delete',
+                name: '删除列',
                 prefix: DeleteIcon(),
                 hide: () => !this.column.canDelete,
                 select: () => {

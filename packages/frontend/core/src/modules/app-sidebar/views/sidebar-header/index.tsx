@@ -10,6 +10,7 @@ export const SidebarHeader = () => {
 
   return (
     <div className={navHeaderStyle} data-open={open}>
+            <a href="#" style={{fontStyle: 'oblique 23deg', fontWeight:'bold', color:'black',fontSize:'18px'}}>Memo Notion V1.1</a>
       <SidebarSwitch show={open} />
     </div>
   );

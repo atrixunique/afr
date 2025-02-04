@@ -1,5 +1,9 @@
-import type { SurfaceBlockComponent } from '@blocksuite/affine-block-surface';
+import {
+  isNoteBlock,
+  type SurfaceBlockComponent,
+} from '@blocksuite/affine-block-surface';
 import { MenuContext } from '@blocksuite/affine-components/toolbar';
+import { getSelectedModelsCommand } from '@blocksuite/affine-shared/commands';
 import {
   GfxPrimitiveElementModel,
   type GfxSelectionManager,
@@ -16,7 +20,6 @@ import {
   isEmbedSyncedDocBlock,
   isFrameBlock,
   isImageBlock,
-  isNoteBlock,
 } from '../../../edgeless/utils/query.js';
 
 export class ElementToolbarMoreMenuContext extends MenuContext {
@@ -47,10 +50,9 @@ export class ElementToolbarMoreMenuContext extends MenuContext {
   }
 
   get selectedBlockModels() {
-    const [result, { selectedModels }] = this.std.command
-      .chain()
-      .getSelectedModels()
-      .run();
+    const [result, { selectedModels }] = this.std.command.exec(
+      getSelectedModelsCommand
+    );
 
     if (!result) return [];
 

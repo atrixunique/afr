@@ -9,15 +9,12 @@ export async function updateBlockType(
 ) {
   await page.evaluate(
     ([flavour, type]) => {
-      window.host.std.command
-        .chain()
-        .updateBlockType({
-          flavour,
-          props: {
-            type,
-          },
-        })
-        .run();
+      window.host.std.command.exec(window.$blocksuite.blocks.updateBlockType, {
+        flavour,
+        props: {
+          type,
+        },
+      });
     },
     [flavour, type] as [BlockSuite.Flavour, string?]
   );

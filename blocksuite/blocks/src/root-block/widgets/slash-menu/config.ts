@@ -1,13 +1,18 @@
 import { addSiblingAttachmentBlocks } from '@blocksuite/affine-block-attachment';
 import { toggleEmbedCardCreateModal } from '@blocksuite/affine-block-bookmark';
 import type { DataViewBlockComponent } from '@blocksuite/affine-block-data-view';
+import { insertDatabaseBlockCommand } from '@blocksuite/affine-block-database';
 import {
   FigmaIcon,
   GithubIcon,
   LoomIcon,
   YoutubeIcon,
 } from '@blocksuite/affine-block-embed';
+import { insertImagesCommand } from '@blocksuite/affine-block-image';
+import { insertLatexBlockCommand } from '@blocksuite/affine-block-latex';
 import { getSurfaceBlock } from '@blocksuite/affine-block-surface';
+import { insertSurfaceRefBlockCommand } from '@blocksuite/affine-block-surface-ref';
+import { insertTableBlockCommand } from '@blocksuite/affine-block-table';
 import {
   ArrowDownBigIcon,
   ArrowUpBigIcon,
@@ -30,6 +35,7 @@ import {
 import {
   getInlineEditorByModel,
   insertContent,
+  insertInlineLatex,
   textConversionConfigs,
   textFormatConfigs,
 } from '@blocksuite/affine-components/rich-text';
@@ -38,9 +44,14 @@ import type {
   FrameBlockModel,
   ParagraphBlockModel,
 } from '@blocksuite/affine-model';
+import {
+  getSelectedModelsCommand,
+  getTextSelectionCommand,
+} from '@blocksuite/affine-shared/commands';
 import { REFERENCE_NODE } from '@blocksuite/affine-shared/consts';
 import {
   FeatureFlagService,
+  FileSizeLimitService,
   TelemetryProvider,
 } from '@blocksuite/affine-shared/services';
 import {
@@ -154,44 +165,44 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
           !insideEdgelessText(model),
       })),
 
-    {
-      name: 'Inline equation',
-      description: 'Create a equation block.',
-      icon: TeXIcon({
-        width: '20',
-        height: '20',
-      }),
-      alias: ['inlineMath, inlineEquation', 'inlineLatex'],
-      action: ({ rootComponent }) => {
-        rootComponent.std.command
-          .chain()
-          .getTextSelection()
-          .insertInlineLatex()
-          .run();
-      },
-    },
+    // {
+    //   name: 'Inline equation',
+    //   description: 'Create a equation block.',
+    //   icon: TeXIcon({
+    //     width: '20',
+    //     height: '20',
+    //   }),
+    //   alias: ['inlineMath, inlineEquation', 'inlineLatex'],
+    //   action: ({ rootComponent }) => {
+    //     rootComponent.std.command
+    //       .chain()
+    //       .pipe(getTextSelectionCommand)
+    //       .pipe(insertInlineLatex)
+    //       .run();
+    //   },
+    // },
 
     // ---------------------------------------------------------
-    { groupName: 'List' },
+    { groupName: '列表' },
     ...textConversionConfigs
       .filter(i => i.flavour === 'affine:list')
       .map(createConversionItem),
 
     // ---------------------------------------------------------
-    { groupName: 'Style' },
-    ...textFormatConfigs
-      .filter(i => !['Code', 'Link'].includes(i.name))
-      .map<SlashMenuActionItem>(createTextFormatItem),
+    // { groupName: '样式' },
+    // ...textFormatConfigs
+    //   .filter(i => !['Code', 'Link'].includes(i.name))
+    //   .map<SlashMenuActionItem>(createTextFormatItem),
 
     // ---------------------------------------------------------
     {
-      groupName: 'Page',
+      groupName: '页面',
       showWhen: ({ model }) =>
         model.doc.schema.flavourSchemaMap.has('affine:embed-linked-doc'),
     },
     {
       name: 'New Doc',
-      description: 'Start a new document.',
+      description: '新建空白页面',
       icon: NewDocIcon,
       tooltip: slashMenuToolTips['New Doc'],
       showWhen: ({ model }) =>
@@ -206,66 +217,66 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         });
       },
     },
-    {
-      name: 'Linked Doc',
-      description: 'Link to another document.',
-      icon: LinkedDocIcon,
-      tooltip: slashMenuToolTips['Linked Doc'],
-      alias: ['dual link'],
-      showWhen: ({ rootComponent, model }) => {
-        const { std } = rootComponent;
-        const linkedDocWidget = std.view.getWidget(
-          'affine-linked-doc-widget',
-          rootComponent.model.id
-        );
-        if (!linkedDocWidget) return false;
+    // {
+    //   name: 'Linked Doc',
+    //   description: 'Link to another document.',
+    //   icon: LinkedDocIcon,
+    //   tooltip: slashMenuToolTips['Linked Doc'],
+    //   alias: ['dual link'],
+    //   showWhen: ({ rootComponent, model }) => {
+    //     const { std } = rootComponent;
+    //     const linkedDocWidget = std.view.getWidget(
+    //       'affine-linked-doc-widget',
+    //       rootComponent.model.id
+    //     );
+    //     if (!linkedDocWidget) return false;
 
-        return model.doc.schema.flavourSchemaMap.has('affine:embed-linked-doc');
-      },
-      action: ({ model, rootComponent }) => {
-        const { std } = rootComponent;
+    //     return model.doc.schema.flavourSchemaMap.has('affine:embed-linked-doc');
+    //   },
+    //   action: ({ model, rootComponent }) => {
+    //     const { std } = rootComponent;
 
-        const linkedDocWidget = std.view.getWidget(
-          'affine-linked-doc-widget',
-          rootComponent.model.id
-        );
-        if (!linkedDocWidget) return;
-        assertType<AffineLinkedDocWidget>(linkedDocWidget);
+    //     const linkedDocWidget = std.view.getWidget(
+    //       'affine-linked-doc-widget',
+    //       rootComponent.model.id
+    //     );
+    //     if (!linkedDocWidget) return;
+    //     assertType<AffineLinkedDocWidget>(linkedDocWidget);
 
-        const triggerKey = linkedDocWidget.config.triggerKeys[0];
+    //     const triggerKey = linkedDocWidget.config.triggerKeys[0];
 
-        insertContent(rootComponent.host, model, triggerKey);
+    //     insertContent(rootComponent.host, model, triggerKey);
 
-        const inlineEditor = getInlineEditorByModel(rootComponent.host, model);
-        // Wait for range to be updated
-        inlineEditor?.slots.inlineRangeSync.once(() => {
-          linkedDocWidget.show({ addTriggerKey: true });
-        });
-      },
-    },
+    //     const inlineEditor = getInlineEditorByModel(rootComponent.host, model);
+    //     // Wait for range to be updated
+    //     inlineEditor?.slots.inlineRangeSync.once(() => {
+    //       linkedDocWidget.show({ addTriggerKey: true });
+    //     });
+    //   },
+    // },
 
     // ---------------------------------------------------------
-    { groupName: 'Content & Media' },
-    {
-      name: 'Table',
-      description: 'Create a table block.',
-      icon: DatabaseTableViewIcon20,
-      tooltip: slashMenuToolTips['Table View'],
-      showWhen: ({ model }) => !insideEdgelessText(model),
-      action: ({ rootComponent }) => {
-        rootComponent.std.command
-          .chain()
-          .getSelectedModels()
-          .insertTableBlock({
-            place: 'after',
-            removeEmptyLine: true,
-          })
-          .run();
-      },
-    },
+    { groupName: '富文本内容' },
+    // {
+    //   name: 'Table',
+    //   description: 'Create a table block.',
+    //   icon: DatabaseTableViewIcon20,
+    //   tooltip: slashMenuToolTips['Table View'],
+    //   showWhen: ({ model }) => !insideEdgelessText(model),
+    //   action: ({ rootComponent }) => {
+    //     rootComponent.std.command
+    //       .chain()
+    //       .pipe(getSelectedModelsCommand)
+    //       .pipe(insertTableBlockCommand, {
+    //         place: 'after',
+    //         removeEmptyLine: true,
+    //       })
+    //       .run();
+    //   },
+    // },
     {
       name: 'Image',
-      description: 'Insert an image.',
+      description: '插入图片',
       icon: ImageIcon20,
       tooltip: slashMenuToolTips['Image'],
       showWhen: ({ model }) =>
@@ -273,8 +284,8 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
       action: async ({ rootComponent }) => {
         const [success, ctx] = rootComponent.std.command
           .chain()
-          .getSelectedModels()
-          .insertImages({ removeEmptyLine: true })
+          .pipe(getSelectedModelsCommand)
+          .pipe(insertImagesCommand, { removeEmptyLine: true })
           .run();
 
         if (success) await ctx.insertedImageIds;
@@ -282,7 +293,7 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
     },
     {
       name: 'Link',
-      description: 'Add a bookmark for reference.',
+      description: '新建页面链接',
       icon: LinkIcon,
       tooltip: slashMenuToolTips['Link'],
       showWhen: ({ model }) =>
@@ -304,7 +315,7 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
     },
     {
       name: 'Attachment',
-      description: 'Attach a file to document.',
+      description: '插入文件附件',
       icon: FileIcon,
       tooltip: slashMenuToolTips['Attachment'],
       alias: ['file'],
@@ -314,10 +325,8 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         const file = await openFileOrFiles();
         if (!file) return;
 
-        const attachmentService =
-          rootComponent.std.getService('affine:attachment');
-        if (!attachmentService) return;
-        const maxFileSize = attachmentService.maxFileSize;
+        const maxFileSize =
+          rootComponent.std.store.get(FileSizeLimitService).maxFileSize;
 
         await addSiblingAttachmentBlocks(
           rootComponent.host,
@@ -328,115 +337,115 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         tryRemoveEmptyLine(model);
       },
     },
-    {
-      name: 'YouTube',
-      description: 'Embed a YouTube video.',
-      icon: YoutubeIcon,
-      tooltip: slashMenuToolTips['YouTube'],
-      showWhen: ({ model }) =>
-        model.doc.schema.flavourSchemaMap.has('affine:embed-youtube'),
-      action: async ({ rootComponent, model }) => {
-        const parentModel = rootComponent.doc.getParent(model);
-        if (!parentModel) {
-          return;
-        }
-        const index = parentModel.children.indexOf(model) + 1;
-        await toggleEmbedCardCreateModal(
-          rootComponent.host,
-          'YouTube',
-          'The added YouTube video link will be displayed as an embed view.',
-          { mode: 'page', parentModel, index }
-        );
-        tryRemoveEmptyLine(model);
-      },
-    },
-    {
-      name: 'GitHub',
-      description: 'Link to a GitHub repository.',
-      icon: GithubIcon,
-      tooltip: slashMenuToolTips['Github'],
-      showWhen: ({ model }) =>
-        model.doc.schema.flavourSchemaMap.has('affine:embed-github'),
-      action: async ({ rootComponent, model }) => {
-        const parentModel = rootComponent.doc.getParent(model);
-        if (!parentModel) {
-          return;
-        }
-        const index = parentModel.children.indexOf(model) + 1;
-        await toggleEmbedCardCreateModal(
-          rootComponent.host,
-          'GitHub',
-          'The added GitHub issue or pull request link will be displayed as a card view.',
-          { mode: 'page', parentModel, index }
-        );
-        tryRemoveEmptyLine(model);
-      },
-    },
-    // TODO: X Twitter
+    // {
+    //   name: 'YouTube',
+    //   description: 'Embed a YouTube video.',
+    //   icon: YoutubeIcon,
+    //   tooltip: slashMenuToolTips['YouTube'],
+    //   showWhen: ({ model }) =>
+    //     model.doc.schema.flavourSchemaMap.has('affine:embed-youtube'),
+    //   action: async ({ rootComponent, model }) => {
+    //     const parentModel = rootComponent.doc.getParent(model);
+    //     if (!parentModel) {
+    //       return;
+    //     }
+    //     const index = parentModel.children.indexOf(model) + 1;
+    //     await toggleEmbedCardCreateModal(
+    //       rootComponent.host,
+    //       'YouTube',
+    //       'The added YouTube video link will be displayed as an embed view.',
+    //       { mode: 'page', parentModel, index }
+    //     );
+    //     tryRemoveEmptyLine(model);
+    //   },
+    // },
+    // {
+    //   name: 'GitHub',
+    //   description: 'Link to a GitHub repository.',
+    //   icon: GithubIcon,
+    //   tooltip: slashMenuToolTips['Github'],
+    //   showWhen: ({ model }) =>
+    //     model.doc.schema.flavourSchemaMap.has('affine:embed-github'),
+    //   action: async ({ rootComponent, model }) => {
+    //     const parentModel = rootComponent.doc.getParent(model);
+    //     if (!parentModel) {
+    //       return;
+    //     }
+    //     const index = parentModel.children.indexOf(model) + 1;
+    //     await toggleEmbedCardCreateModal(
+    //       rootComponent.host,
+    //       'GitHub',
+    //       'The added GitHub issue or pull request link will be displayed as a card view.',
+    //       { mode: 'page', parentModel, index }
+    //     );
+    //     tryRemoveEmptyLine(model);
+    //   },
+    // },
+    // // TODO: X Twitter
 
-    {
-      name: 'Figma',
-      description: 'Embed a Figma document.',
-      icon: FigmaIcon,
-      tooltip: slashMenuToolTips['Figma'],
-      showWhen: ({ model }) =>
-        model.doc.schema.flavourSchemaMap.has('affine:embed-figma'),
-      action: async ({ rootComponent, model }) => {
-        const parentModel = rootComponent.doc.getParent(model);
-        if (!parentModel) {
-          return;
-        }
-        const index = parentModel.children.indexOf(model) + 1;
-        await toggleEmbedCardCreateModal(
-          rootComponent.host,
-          'Figma',
-          'The added Figma link will be displayed as an embed view.',
-          { mode: 'page', parentModel, index }
-        );
-        tryRemoveEmptyLine(model);
-      },
-    },
+    // {
+    //   name: 'Figma',
+    //   description: 'Embed a Figma document.',
+    //   icon: FigmaIcon,
+    //   tooltip: slashMenuToolTips['Figma'],
+    //   showWhen: ({ model }) =>
+    //     model.doc.schema.flavourSchemaMap.has('affine:embed-figma'),
+    //   action: async ({ rootComponent, model }) => {
+    //     const parentModel = rootComponent.doc.getParent(model);
+    //     if (!parentModel) {
+    //       return;
+    //     }
+    //     const index = parentModel.children.indexOf(model) + 1;
+    //     await toggleEmbedCardCreateModal(
+    //       rootComponent.host,
+    //       'Figma',
+    //       'The added Figma link will be displayed as an embed view.',
+    //       { mode: 'page', parentModel, index }
+    //     );
+    //     tryRemoveEmptyLine(model);
+    //   },
+    // },
 
-    {
-      name: 'Loom',
-      icon: LoomIcon,
-      showWhen: ({ model }) =>
-        model.doc.schema.flavourSchemaMap.has('affine:embed-loom'),
-      action: async ({ rootComponent, model }) => {
-        const parentModel = rootComponent.doc.getParent(model);
-        if (!parentModel) {
-          return;
-        }
-        const index = parentModel.children.indexOf(model) + 1;
-        await toggleEmbedCardCreateModal(
-          rootComponent.host,
-          'Loom',
-          'The added Loom video link will be displayed as an embed view.',
-          { mode: 'page', parentModel, index }
-        );
-        tryRemoveEmptyLine(model);
-      },
-    },
+    // {
+    //   name: 'Loom',
+    //   icon: LoomIcon,
+    //   showWhen: ({ model }) =>
+    //     model.doc.schema.flavourSchemaMap.has('affine:embed-loom'),
+    //   action: async ({ rootComponent, model }) => {
+    //     const parentModel = rootComponent.doc.getParent(model);
+    //     if (!parentModel) {
+    //       return;
+    //     }
+    //     const index = parentModel.children.indexOf(model) + 1;
+    //     await toggleEmbedCardCreateModal(
+    //       rootComponent.host,
+    //       'Loom',
+    //       'The added Loom video link will be displayed as an embed view.',
+    //       { mode: 'page', parentModel, index }
+    //     );
+    //     tryRemoveEmptyLine(model);
+    //   },
+    // },
 
-    {
-      name: 'Equation',
-      description: 'Create a equation block.',
-      icon: TeXIcon({
-        width: '20',
-        height: '20',
-      }),
-      alias: ['mathBlock, equationBlock', 'latexBlock'],
-      action: ({ rootComponent }) => {
-        rootComponent.std.command
-          .chain()
-          .getSelectedModels()
-          .insertLatexBlock({
-            place: 'after',
-            removeEmptyLine: true,
-          })
-          .run();
-      },
-    },
+    // {
+    //   name: 'Equation',
+    //   description: 'Create a equation block.',
+    //   icon: TeXIcon({
+    //     width: '20',
+    //     height: '20',
+    //   }),
+    //   alias: ['mathBlock, equationBlock', 'latexBlock'],
+    //   action: ({ rootComponent }) => {
+    //     rootComponent.std.command
+    //       .chain()
+    //       .pipe(getSelectedModelsCommand)
+    //       .pipe(insertLatexBlockCommand, {
+    //         place: 'after',
+    //         removeEmptyLine: true,
+    //       })
+    //       .run();
+    //   },
+    // },
 
     // TODO(@L-Sun): Linear
 
@@ -460,8 +469,8 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         action: ({ rootComponent }) => {
           rootComponent.std.command
             .chain()
-            .getSelectedModels()
-            .insertSurfaceRefBlock({
+            .pipe(getSelectedModelsCommand)
+            .pipe(insertSurfaceRefBlockCommand, {
               reference: frameModel.id,
               place: 'after',
               removeEmptyLine: true,
@@ -477,8 +486,8 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         action: () => {
           rootComponent.std.command
             .chain()
-            .getSelectedModels()
-            .insertSurfaceRefBlock({
+            .pipe(getSelectedModelsCommand)
+            .pipe(insertSurfaceRefBlockCommand, {
               reference: group.id,
               place: 'after',
               removeEmptyLine: true,
@@ -501,64 +510,64 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
     },
 
     // ---------------------------------------------------------
-    { groupName: 'Date' },
-    () => {
-      const now = new Date();
-      const tomorrow = new Date();
-      const yesterday = new Date();
+    // { groupName: 'Date' },
+    // () => {
+    //   const now = new Date();
+    //   const tomorrow = new Date();
+    //   const yesterday = new Date();
 
-      yesterday.setDate(yesterday.getDate() - 1);
-      tomorrow.setDate(tomorrow.getDate() + 1);
+    //   yesterday.setDate(yesterday.getDate() - 1);
+    //   tomorrow.setDate(tomorrow.getDate() + 1);
 
-      return [
-        {
-          name: 'Today',
-          icon: TodayIcon,
-          tooltip: slashMenuToolTips['Today'],
-          description: formatDate(now),
-          action: ({ rootComponent, model }) => {
-            insertContent(rootComponent.host, model, formatDate(now));
-          },
-        },
-        {
-          name: 'Tomorrow',
-          icon: TomorrowIcon,
-          tooltip: slashMenuToolTips['Tomorrow'],
-          description: formatDate(tomorrow),
-          action: ({ rootComponent, model }) => {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            insertContent(rootComponent.host, model, formatDate(tomorrow));
-          },
-        },
-        {
-          name: 'Yesterday',
-          icon: YesterdayIcon,
-          tooltip: slashMenuToolTips['Yesterday'],
-          description: formatDate(yesterday),
-          action: ({ rootComponent, model }) => {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            insertContent(rootComponent.host, model, formatDate(yesterday));
-          },
-        },
-        {
-          name: 'Now',
-          icon: NowIcon,
-          tooltip: slashMenuToolTips['Now'],
-          description: formatTime(now),
-          action: ({ rootComponent, model }) => {
-            insertContent(rootComponent.host, model, formatTime(now));
-          },
-        },
-      ];
-    },
+    //   return [
+    //     {
+    //       name: 'Today',
+    //       icon: TodayIcon,
+    //       tooltip: slashMenuToolTips['Today'],
+    //       description: formatDate(now),
+    //       action: ({ rootComponent, model }) => {
+    //         insertContent(rootComponent.host, model, formatDate(now));
+    //       },
+    //     },
+    //     {
+    //       name: 'Tomorrow',
+    //       icon: TomorrowIcon,
+    //       tooltip: slashMenuToolTips['Tomorrow'],
+    //       description: formatDate(tomorrow),
+    //       action: ({ rootComponent, model }) => {
+    //         const tomorrow = new Date();
+    //         tomorrow.setDate(tomorrow.getDate() + 1);
+    //         insertContent(rootComponent.host, model, formatDate(tomorrow));
+    //       },
+    //     },
+    //     {
+    //       name: 'Yesterday',
+    //       icon: YesterdayIcon,
+    //       tooltip: slashMenuToolTips['Yesterday'],
+    //       description: formatDate(yesterday),
+    //       action: ({ rootComponent, model }) => {
+    //         const yesterday = new Date();
+    //         yesterday.setDate(yesterday.getDate() - 1);
+    //         insertContent(rootComponent.host, model, formatDate(yesterday));
+    //       },
+    //     },
+    //     {
+    //       name: 'Now',
+    //       icon: NowIcon,
+    //       tooltip: slashMenuToolTips['Now'],
+    //       description: formatTime(now),
+    //       action: ({ rootComponent, model }) => {
+    //         insertContent(rootComponent.host, model, formatTime(now));
+    //       },
+    //     },
+    //   ];
+    // },
 
     // ---------------------------------------------------------
-    { groupName: 'Database' },
+    { groupName: '数据库' },
     {
-      name: 'Table View',
-      description: 'Display items in a table format.',
+      name: '新建数据库',
+      description: '建立一个表格型数据库.',
       alias: ['database'],
       icon: DatabaseTableViewIcon20,
       tooltip: slashMenuToolTips['Table View'],
@@ -568,13 +577,13 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
       action: ({ rootComponent }) => {
         rootComponent.std.command
           .chain()
-          .getSelectedModels()
-          .insertDatabaseBlock({
+          .pipe(getSelectedModelsCommand)
+          .pipe(insertDatabaseBlockCommand, {
             viewType: viewPresets.tableViewMeta.type,
             place: 'after',
             removeEmptyLine: true,
           })
-          .inline(({ insertedDatabaseBlockId }) => {
+          .pipe(({ insertedDatabaseBlockId }) => {
             if (insertedDatabaseBlockId) {
               const telemetry =
                 rootComponent.std.getOptional(TelemetryProvider);
@@ -619,134 +628,134 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         tryRemoveEmptyLine(model);
       },
     },
-    {
-      name: 'Kanban View',
-      description: 'Visualize data in a dashboard.',
-      alias: ['database'],
-      icon: DatabaseKanbanViewIcon20,
-      tooltip: slashMenuToolTips['Kanban View'],
-      showWhen: ({ model }) =>
-        model.doc.schema.flavourSchemaMap.has('affine:database') &&
-        !insideEdgelessText(model),
-      action: ({ rootComponent }) => {
-        rootComponent.std.command
-          .chain()
-          .getSelectedModels()
-          .insertDatabaseBlock({
-            viewType: viewPresets.kanbanViewMeta.type,
-            place: 'after',
-            removeEmptyLine: true,
-          })
-          .inline(({ insertedDatabaseBlockId }) => {
-            if (insertedDatabaseBlockId) {
-              const telemetry =
-                rootComponent.std.getOptional(TelemetryProvider);
-              telemetry?.track('AddDatabase', {
-                blockId: insertedDatabaseBlockId,
-              });
-            }
-          })
-          .run();
-      },
-    },
+    // {
+    //   name: 'Kanban View',
+    //   description: 'Visualize data in a dashboard.',
+    //   alias: ['database'],
+    //   icon: DatabaseKanbanViewIcon20,
+    //   tooltip: slashMenuToolTips['Kanban View'],
+    //   showWhen: ({ model }) =>
+    //     model.doc.schema.flavourSchemaMap.has('affine:database') &&
+    //     !insideEdgelessText(model),
+    //   action: ({ rootComponent }) => {
+    //     rootComponent.std.command
+    //       .chain()
+    //       .pipe(getSelectedModelsCommand)
+    //       .pipe(insertDatabaseBlockCommand, {
+    //         viewType: viewPresets.kanbanViewMeta.type,
+    //         place: 'after',
+    //         removeEmptyLine: true,
+    //       })
+    //       .pipe(({ insertedDatabaseBlockId }) => {
+    //         if (insertedDatabaseBlockId) {
+    //           const telemetry =
+    //             rootComponent.std.getOptional(TelemetryProvider);
+    //           telemetry?.track('AddDatabase', {
+    //             blockId: insertedDatabaseBlockId,
+    //           });
+    //         }
+    //       })
+    //       .run();
+    //   },
+    // },
 
     // ---------------------------------------------------------
-    { groupName: 'Actions' },
-    {
-      name: 'Move Up',
-      description: 'Shift this line up.',
-      icon: ArrowUpBigIcon,
-      tooltip: slashMenuToolTips['Move Up'],
-      action: ({ rootComponent, model }) => {
-        const doc = rootComponent.doc;
-        const previousSiblingModel = doc.getPrev(model);
-        if (!previousSiblingModel) return;
+    // { groupName: 'Actions' },
+    // {
+    //   name: 'Move Up',
+    //   description: 'Shift this line up.',
+    //   icon: ArrowUpBigIcon,
+    //   tooltip: slashMenuToolTips['Move Up'],
+    //   action: ({ rootComponent, model }) => {
+    //     const doc = rootComponent.doc;
+    //     const previousSiblingModel = doc.getPrev(model);
+    //     if (!previousSiblingModel) return;
 
-        const parentModel = doc.getParent(previousSiblingModel);
-        if (!parentModel) return;
+    //     const parentModel = doc.getParent(previousSiblingModel);
+    //     if (!parentModel) return;
 
-        doc.moveBlocks([model], parentModel, previousSiblingModel, true);
-      },
-    },
-    {
-      name: 'Move Down',
-      description: 'Shift this line down.',
-      icon: ArrowDownBigIcon,
-      tooltip: slashMenuToolTips['Move Down'],
-      action: ({ rootComponent, model }) => {
-        const doc = rootComponent.doc;
-        const nextSiblingModel = doc.getNext(model);
-        if (!nextSiblingModel) return;
+    //     doc.moveBlocks([model], parentModel, previousSiblingModel, true);
+    //   },
+    // },
+    // {
+    //   name: 'Move Down',
+    //   description: 'Shift this line down.',
+    //   icon: ArrowDownBigIcon,
+    //   tooltip: slashMenuToolTips['Move Down'],
+    //   action: ({ rootComponent, model }) => {
+    //     const doc = rootComponent.doc;
+    //     const nextSiblingModel = doc.getNext(model);
+    //     if (!nextSiblingModel) return;
 
-        const parentModel = doc.getParent(nextSiblingModel);
-        if (!parentModel) return;
+    //     const parentModel = doc.getParent(nextSiblingModel);
+    //     if (!parentModel) return;
 
-        doc.moveBlocks([model], parentModel, nextSiblingModel, false);
-      },
-    },
-    {
-      name: 'Copy',
-      description: 'Copy this line to clipboard.',
-      icon: CopyIcon,
-      tooltip: slashMenuToolTips['Copy'],
-      action: ({ rootComponent, model }) => {
-        const slice = Slice.fromModels(rootComponent.std.store, [model]);
+    //     doc.moveBlocks([model], parentModel, nextSiblingModel, false);
+    //   },
+    // },
+    // {
+    //   name: 'Copy',
+    //   description: 'Copy this line to clipboard.',
+    //   icon: CopyIcon,
+    //   tooltip: slashMenuToolTips['Copy'],
+    //   action: ({ rootComponent, model }) => {
+    //     const slice = Slice.fromModels(rootComponent.std.store, [model]);
 
-        rootComponent.std.clipboard
-          .copy(slice)
-          .then(() => {
-            toast(rootComponent.host, 'Copied to clipboard');
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      },
-    },
-    {
-      name: 'Duplicate',
-      description: 'Create a duplicate of this line.',
-      icon: DualLinkIcon({ width: '20', height: '20' }),
-      tooltip: slashMenuToolTips['Copy'],
-      action: ({ rootComponent, model }) => {
-        if (!model.text || !(model.text instanceof Text)) {
-          console.error("Can't duplicate a block without text");
-          return;
-        }
-        const parent = rootComponent.doc.getParent(model);
-        if (!parent) {
-          console.error(
-            'Failed to duplicate block! Parent not found: ' +
-              model.id +
-              '|' +
-              model.flavour
-          );
-          return;
-        }
-        const index = parent.children.indexOf(model);
+    //     rootComponent.std.clipboard
+    //       .copy(slice)
+    //       .then(() => {
+    //         toast(rootComponent.host, 'Copied to clipboard');
+    //       })
+    //       .catch(e => {
+    //         console.error(e);
+    //       });
+    //   },
+    // },
+    // {
+    //   name: 'Duplicate',
+    //   description: 'Create a duplicate of this line.',
+    //   icon: DualLinkIcon({ width: '20', height: '20' }),
+    //   tooltip: slashMenuToolTips['Copy'],
+    //   action: ({ rootComponent, model }) => {
+    //     if (!model.text || !(model.text instanceof Text)) {
+    //       console.error("Can't duplicate a block without text");
+    //       return;
+    //     }
+    //     const parent = rootComponent.doc.getParent(model);
+    //     if (!parent) {
+    //       console.error(
+    //         'Failed to duplicate block! Parent not found: ' +
+    //           model.id +
+    //           '|' +
+    //           model.flavour
+    //       );
+    //       return;
+    //     }
+    //     const index = parent.children.indexOf(model);
 
-        // TODO add clone model util
-        rootComponent.doc.addBlock(
-          model.flavour as never,
-          {
-            type: (model as ParagraphBlockModel).type,
-            text: new Text(model.text.toDelta() as DeltaInsert[]),
-            // @ts-expect-error FIXME: ts error
-            checked: model.checked,
-          },
-          rootComponent.doc.getParent(model),
-          index
-        );
-      },
-    },
-    {
-      name: 'Delete',
-      description: 'Remove this line permanently.',
-      alias: ['remove'],
-      icon: DeleteIcon,
-      tooltip: slashMenuToolTips['Delete'],
-      action: ({ rootComponent, model }) => {
-        rootComponent.doc.deleteBlock(model);
-      },
-    },
+    //     // TODO add clone model util
+    //     rootComponent.doc.addBlock(
+    //       model.flavour as never,
+    //       {
+    //         type: (model as ParagraphBlockModel).type,
+    //         text: new Text(model.text.toDelta() as DeltaInsert[]),
+    //         // @ts-expect-error FIXME: ts error
+    //         checked: model.checked,
+    //       },
+    //       rootComponent.doc.getParent(model),
+    //       index
+    //     );
+    //   },
+    // },
+    // {
+    //   name: 'Delete',
+    //   description: 'Remove this line permanently.',
+    //   alias: ['remove'],
+    //   icon: DeleteIcon,
+    //   tooltip: slashMenuToolTips['Delete'],
+    //   action: ({ rootComponent, model }) => {
+    //     rootComponent.doc.deleteBlock(model);
+    //   },
+    // },
   ],
 };

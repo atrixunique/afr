@@ -102,6 +102,9 @@ export interface SingleView {
 
   propertyNameSet(propertyId: string, name: string): void;
 
+  propertyDataRefGet(propertyId: string): string;
+  propertyDataRefSet(propertyId: string, ref: string): void;
+
   propertyTypeGet(propertyId: string): string | undefined;
 
   propertyTypeSet(propertyId: string, type: string): void;
@@ -427,6 +430,14 @@ export abstract class SingleViewBase<
     this.dataSource.propertyNameSet(propertyId, name);
   }
 
+  propertyDataRefGet(propertyId: string): string {
+    return this.dataSource.propertyDataRefGet(propertyId);
+  }
+
+  propertyDataRefSet(propertyId: string, ref: string): void {
+    this.dataSource.propertyDataRefSet(propertyId, ref);
+  }
+  
   propertyNextGet(propertyId: string): Property | undefined {
     const index = this.propertyIndexGet(propertyId);
     const nextId = this.propertyIdGetByIndex(index + 1);

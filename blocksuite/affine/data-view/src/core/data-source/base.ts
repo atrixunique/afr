@@ -34,6 +34,9 @@ export interface DataSource {
   propertyNameGet(propertyId: string): string;
   propertyNameSet(propertyId: string, name: string): void;
 
+  propertyRefGet(propertyId: string): string;
+  propertyRefSet(propertyId: string, ref: string): void;
+
   propertyTypeGet(propertyId: string): string | undefined;
   propertyTypeGet$(propertyId: string): ReadonlySignal<string | undefined>;
   propertyTypeSet(propertyId: string, type: string): void;
@@ -189,6 +192,10 @@ export abstract class DataSourceBase implements DataSource {
 
   abstract propertyNameSet(propertyId: string, name: string): void;
 
+  abstract propertyRefGet(propertyId: string): string;
+
+  abstract propertyRefSet(propertyId: string, ref: string): void;
+  
   propertyReadonlyGet(_propertyId: string): boolean {
     return false;
   }

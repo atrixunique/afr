@@ -213,11 +213,11 @@ export const AccountSetting = ({
       />
       <AvatarAndName />
       <SettingRow name={t['com.affine.settings.email']()} desc={account.email}>
-        <Button onClick={onChangeEmail}>
+        {/* <Button onClick={onChangeEmail}>
           {account.info?.emailVerified
             ? t['com.affine.settings.email.action.change']()
             : t['com.affine.settings.email.action.verify']()}
-        </Button>
+        </Button> */}
       </SettingRow>
       <SettingRow
         name={t['com.affine.settings.password']()}

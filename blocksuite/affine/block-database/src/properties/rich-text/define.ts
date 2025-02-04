@@ -11,7 +11,7 @@ export const richTextColumnType = propertyType('rich-text');
 
 export const richTextPropertyModelConfig =
   richTextColumnType.modelConfig<RichTextCellType>({
-    name: 'Text',
+    name: '文本',
     type: () => t.richText.instance(),
     defaultData: () => ({}),
     cellToString: ({ value }) => value?.toString() ?? '',

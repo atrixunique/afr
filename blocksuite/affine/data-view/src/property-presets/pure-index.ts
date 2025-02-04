@@ -1,4 +1,5 @@
 import { checkboxPropertyModelConfig } from './checkbox/define.js';
+import { dataRefPropertyModelConfig } from './data-ref/define.js';
 import { datePropertyModelConfig } from './date/define.js';
 import { imagePropertyModelConfig } from './image/define.js';
 import { multiSelectPropertyModelConfig } from './multi-select/define.js';
@@ -16,4 +17,5 @@ export const propertyModelPresets = {
   progressPropertyModelConfig,
   selectPropertyModelConfig,
   textPropertyModelConfig,
+  dataRefPropertyModelConfig,
 };

@@ -56,7 +56,7 @@ export class DatePicker extends WithDisposable(LitElement) {
 
   private readonly _maxYear = 2099;
 
-  private readonly _minYear = 1970;
+  private readonly _minYear = 1930;
 
   get _cardStyle() {
     return {

@@ -135,7 +135,7 @@ export const SignInWithPasswordStep = ({
           errorHint={t['com.affine.auth.password.error']()}
           onEnter={onSignIn}
         />
-        {!isSelfhosted && (
+        {/* {!isSelfhosted && (
           <div className={styles.passwordButtonRow}>
             <a
               data-testid="send-magic-link-button"
@@ -145,7 +145,7 @@ export const SignInWithPasswordStep = ({
               {t['com.affine.auth.sign.auth.code.send-email.sign-in']()}
             </a>
           </div>
-        )}
+        )} */}
         {!verifyToken && needCaptcha && <Captcha />}
         <Button
           data-testid="sign-in-button"

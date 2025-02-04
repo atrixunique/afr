@@ -169,7 +169,8 @@ const SettingModalInner = ({
             </div>
             <div className={style.footer}>
               <ContactWithUsIcon fontSize={16} />
-              <Trans
+              Memo Notion
+              {/* <Trans
                 i18nKey={'com.affine.settings.suggestion-2'}
                 components={{
                   1: (
@@ -185,7 +186,7 @@ const SettingModalInner = ({
                     />
                   ),
                 }}
-              />
+              /> */}
             </div>
             <StarAFFiNEModal
               open={openStarAFFiNEModal}

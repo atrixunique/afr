@@ -64,7 +64,7 @@ export const popRowMenu = (
         name: '',
         items: [
           menu.action({
-            name: 'Delete Rows',
+            name: '删除这些行',
             class: {
               'delete-item': true,
             },
@@ -82,7 +82,7 @@ export const popRowMenu = (
   if (!row) return;
   popFilterableSimpleMenu(ele, [
     menu.action({
-      name: 'Expand Row',
+      name: '展开行',
       prefix: ExpandFullIcon(),
       select: () => {
         openDetail(dataViewEle, row.id, selectionController);
@@ -92,7 +92,7 @@ export const popRowMenu = (
       name: '',
       items: [
         menu.action({
-          name: 'Insert Before',
+          name: '在上方添加行',
           prefix: html` <div
             style="transform: rotate(90deg);display:flex;align-items:center;"
           >
@@ -103,7 +103,7 @@ export const popRowMenu = (
           },
         }),
         menu.action({
-          name: 'Insert After',
+          name: '在下方添加行',
           prefix: html` <div
             style="transform: rotate(90deg);display:flex;align-items:center;"
           >
@@ -118,7 +118,7 @@ export const popRowMenu = (
     menu.group({
       items: [
         menu.action({
-          name: 'Delete Row',
+          name: '删除行',
           class: { 'delete-item': true },
           prefix: DeleteIcon(),
           select: () => {

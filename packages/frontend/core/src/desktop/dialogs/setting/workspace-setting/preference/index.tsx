@@ -49,8 +49,8 @@ export const WorkspaceSettingDetail = ({
           )}
         </SettingRow>
       </SettingWrapper>
-      <TemplateDocSetting />
-      <SharingPanel />
+      {/* <TemplateDocSetting />
+      <SharingPanel /> */}
       <SettingWrapper>
         <DeleteLeaveWorkspace onCloseSetting={onCloseSetting} />
       </SettingWrapper>
