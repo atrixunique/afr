@@ -511,12 +511,17 @@ export const pasteMiddleware = (
   return ({ slots }) => {
     let tr: PasteTr | undefined;
     slots.beforeImport.on(payload => {
+
+      // console.log('pasting!');
+      // console.log(payload);
+
       if (payload.type === 'slice') {
         const { snapshot } = payload;
         flatNote(snapshot);
 
         const text = std.selection.find(TextSelection);
         if (!text) {
+          console.log('no text.');
           return;
         }
         tr = new PasteTr(std, text, payload.snapshot);
