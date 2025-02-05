@@ -65,13 +65,13 @@ export const AboutAffine = () => {
         data-testid="about-title"
       />
       <SettingWrapper title={t['com.affine.aboutAFFiNE.version.title']()}>
-        <SettingRow
+        {/* <SettingRow
           name={appName}
           desc={BUILD_CONFIG.appVersion}
           className={styles.appImageRow}
         >
           <img src={appIcon} alt={appName} width={56} height={56} />
-        </SettingRow>
+        </SettingRow> */}
         <SettingRow
           name={t['com.affine.aboutAFFiNE.version.editor.title']()}
           desc={BUILD_CONFIG.editorVersion}
