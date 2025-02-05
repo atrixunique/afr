@@ -521,11 +521,15 @@ export const pasteMiddleware = (
 
         const text = std.selection.find(TextSelection);
         if (!text) {
-          console.log('no text.');
+          
           return;
         }
         tr = new PasteTr(std, text, payload.snapshot);
+        debugger;
         if (tr.canMerge()) {
+          // console.log('merge');
+          // console.log(tr);
+
           tr.merge();
         }
       }
