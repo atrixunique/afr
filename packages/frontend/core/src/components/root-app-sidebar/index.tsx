@@ -48,6 +48,9 @@ import { TrashButton } from './trash-button';
 import { UpdaterButton } from './updater-button';
 import { UserInfo } from './user-info';
 
+import { AuthService } from '../../modules/cloud';
+
+
 export type RootAppSidebarProps = {
   isPublicWorkspace: boolean;
   onOpenQuickSearchModal: () => void;
@@ -91,6 +94,13 @@ export const RootAppSidebar = memo((): ReactElement => {
     WorkbenchService,
     CMDKQuickSearchService,
   });
+
+  const authService = useService(AuthService);
+  const loggedIn = useLiveData(
+    authService.session.status$.map(s => s === 'authenticated')
+  );
+
+
   const t = useI18n();
   const workspaceDialogService = useService(WorkspaceDialogService);
   const workbench = workbenchService.workbench;
@@ -197,7 +207,9 @@ export const RootAppSidebar = memo((): ReactElement => {
         </CollapsibleSection>
       </SidebarScrollableContainer>
       <SidebarContainer>
-        {BUILD_CONFIG.isElectron ? <UpdaterButton /> : <AppDownloadButton />}
+        {/* {BUILD_CONFIG.isElectron ? <UpdaterButton /> : <AppDownloadButton />} */}
+     {loggedIn ? <AppDownloadButton />:<br/>}
+     
       </SidebarContainer>
     </AppSidebar>
   );

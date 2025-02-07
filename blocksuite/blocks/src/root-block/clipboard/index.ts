@@ -151,6 +151,9 @@ export class PageClipboard {
     const e = ctx.get('clipboardState').raw;
     e.preventDefault();
 
+    console.log('paste!');
+    console.log(this._std.command);
+
     this._std.store.captureSync();
     this._std.command
       .chain()

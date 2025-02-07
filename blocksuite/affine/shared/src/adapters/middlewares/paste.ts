@@ -525,7 +525,7 @@ export const pasteMiddleware = (
           return;
         }
         tr = new PasteTr(std, text, payload.snapshot);
-        debugger;
+        // debugger;
         if (tr.canMerge()) {
           // console.log('merge');
           // console.log(tr);
