@@ -104,6 +104,7 @@ export function JournalPageHeader({ page, workspace }: PageHeaderProps) {
     <Header className={styles.header} ref={containerRef}>
       <ViewTitle title={title} />
       <ViewIcon icon="journal" />
+      <ViewIcon icon="journal" />
       <EditorModeSwitch />
       <div className={styles.journalWeekPicker}>
         <JournalWeekDatePicker page={page} />

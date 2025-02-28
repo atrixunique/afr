@@ -389,83 +389,90 @@ export class RichTextCellEditing extends BaseRichTextCell {
   };
 
   private readonly _onPaste = (e: ClipboardEvent) => {
+
     const inlineEditor = this.inlineEditor;
     if (!inlineEditor) return;
 
     const inlineRange = inlineEditor.getInlineRange();
     if (!inlineRange) return;
 
-    if (e.clipboardData) {
-      try {
-        const getDeltas = (snapshot: BlockSnapshot): DeltaInsert[] => {
-          // @ts-expect-error FIXME: ts error
-          const text = snapshot.props?.text?.delta;
-          return text
-            ? [...text, ...(snapshot.children?.flatMap(getDeltas) ?? [])]
-            : snapshot.children?.flatMap(getDeltas);
-        };
-        const snapshot = this.std?.clipboard?.readFromClipboard(
-          e.clipboardData
-        )['BLOCKSUITE/SNAPSHOT'];
-        const deltas = (
-          JSON.parse(snapshot).snapshot.content as BlockSnapshot[]
-        ).flatMap(getDeltas);
-        deltas.forEach(delta => this.insertDelta(delta));
-        return;
-      } catch {
-        //
-      }
-    }
+    //console.log(e);
+
+    // if (e.clipboardData) {
+    //   try {
+        
+    //     const getDeltas = (snapshot: BlockSnapshot): DeltaInsert[] => {
+    //       // @ts-expect-error FIXME: ts error
+    //       const text = snapshot.props?.text?.delta;
+    //       return text
+    //         ? [...text, ...(snapshot.children?.flatMap(getDeltas) ?? [])]
+    //         : snapshot.children?.flatMap(getDeltas);
+    //     };
+    //     const snapshot = this.std?.clipboard?.readFromClipboard(
+    //       e.clipboardData
+    //     )['BLOCKSUITE/SNAPSHOT'];
+    //     const deltas = (
+    //       JSON.parse(snapshot).snapshot.content as BlockSnapshot[]
+    //     ).flatMap(getDeltas);
+    //     deltas.forEach(delta => this.insertDelta(delta));
+    //     return;
+    //   } catch {
+        
+    //   }
+    // }
+
     const text = e.clipboardData
       ?.getData('text/plain')
       ?.replace(/\r?\n|\r/g, '\n');
     if (!text) return;
     e.preventDefault();
     e.stopPropagation();
-    if (isValidUrl(text)) {
-      const std = this.std;
-      const result = std?.getOptional(ParseDocUrlProvider)?.parseDocUrl(text);
-      if (result) {
-        const text = ' ';
-        inlineEditor.insertText(inlineRange, text, {
-          reference: {
-            type: 'LinkedPage',
-            pageId: result.docId,
-            params: {
-              blockIds: result.blockIds,
-              elementIds: result.elementIds,
-              mode: result.mode,
-            },
-          },
-        });
-        inlineEditor.setInlineRange({
-          index: inlineRange.index + text.length,
-          length: 0,
-        });
 
-        // Track when a linked doc is created in database rich-text column
-        std?.getOptional(TelemetryProvider)?.track('LinkedDocCreated', {
-          module: 'database rich-text cell',
-          type: 'paste',
-          segment: 'database',
-          parentFlavour: 'affine:database',
-        });
-      } else {
-        inlineEditor.insertText(inlineRange, text, {
-          link: text,
-        });
-        inlineEditor.setInlineRange({
-          index: inlineRange.index + text.length,
-          length: 0,
-        });
-      }
-    } else {
-      inlineEditor.insertText(inlineRange, text);
-      inlineEditor.setInlineRange({
-        index: inlineRange.index + text.length,
-        length: 0,
-      });
-    }
+    // if (isValidUrl(text)) {
+    //   const std = this.std;
+    //   const result = std?.getOptional(ParseDocUrlProvider)?.parseDocUrl(text);
+    //   if (result) {
+    //     const text = ' ';
+    //     inlineEditor.insertText(inlineRange, text, {
+    //       reference: {
+    //         type: 'LinkedPage',
+    //         pageId: result.docId,
+    //         params: {
+    //           blockIds: result.blockIds,
+    //           elementIds: result.elementIds,
+    //           mode: result.mode,
+    //         },
+    //       },
+    //     });
+    //     inlineEditor.setInlineRange({
+    //       index: inlineRange.index + text.length,
+    //       length: 0,
+    //     });
+
+    //     // Track when a linked doc is created in database rich-text column
+    //     std?.getOptional(TelemetryProvider)?.track('LinkedDocCreated', {
+    //       module: 'database rich-text cell',
+    //       type: 'paste',
+    //       segment: 'database',
+    //       parentFlavour: 'affine:database',
+    //     });
+    //   } else {
+    //     inlineEditor.insertText(inlineRange, text, {
+    //       link: text,
+    //     });
+    //     inlineEditor.setInlineRange({
+    //       index: inlineRange.index + text.length,
+    //       length: 0,
+    //     });
+    //   }
+    // } else {
+    
+    //   inlineEditor.insertText(inlineRange, text);
+    //   inlineEditor.setInlineRange({
+    //     index: inlineRange.index + text.length,
+    //     length: 0,
+    //   });
+    // }
   };
 
   override connectedCallback() {

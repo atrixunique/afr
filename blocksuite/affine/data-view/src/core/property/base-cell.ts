@@ -104,7 +104,8 @@ export abstract class BaseCellRenderer<
     // do nothing
   }
 
-  onPaste(_e: ClipboardEvent) {}
+  onPaste(_e: ClipboardEvent) {
+  }
 
   @property({ attribute: false })
   accessor isEditing!: boolean;

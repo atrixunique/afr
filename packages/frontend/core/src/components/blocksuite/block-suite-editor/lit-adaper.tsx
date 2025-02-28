@@ -334,10 +334,10 @@ export const BlocksuiteDocEditor = forwardRef<
           data-testid="page-editor-blank"
           onClick={onClickBlank}
         ></div>
-        {/* <StarterBar doc={page} />
+        <StarterBar doc={page} />
         {!shared && displayBiDirectionalLink ? (
           <BiDirectionalLinkPanel />
-        ) : null} */}
+        ) : null}
       </div>
       {portals}
     </>
