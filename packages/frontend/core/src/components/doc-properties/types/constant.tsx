@@ -86,12 +86,12 @@ export const DocPropertyTypes = {
     description: 'com.affine.page-properties.property.createdAt.tooltips',
     renameable: false,
   },
-  // docPrimaryMode: {
-  //   icon: FileIcon,
-  //   value: DocPrimaryModeValue,
-  //   name: 'com.affine.page-properties.property.docPrimaryMode',
-  //   description: 'com.affine.page-properties.property.docPrimaryMode.tooltips',
-  // },
+  docPrimaryMode: {
+    icon: FileIcon,
+    value: DocPrimaryModeValue,
+    name: 'com.affine.page-properties.property.docPrimaryMode',
+    description: 'com.affine.page-properties.property.docPrimaryMode.tooltips',
+  },
   // journal: {
   //   icon: TodayIcon,
   //   value: JournalValue,
