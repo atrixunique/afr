@@ -347,6 +347,7 @@ export class RichText extends WithDisposable(ShadowlessElement) {
 
   // If it is true rich-text will handle undo/redo by itself. (including v-range restore)
   override render() {
+
     const classes = classMap({
       'inline-editor': true,
       'nowrap-lines': !this.wrapText,
@@ -432,7 +433,7 @@ export class RichText extends WithDisposable(ShadowlessElement) {
   accessor vLineRenderer: ((vLine: VLine) => TemplateResult) | undefined;
 
   @property({ attribute: false })
-  accessor wrapText = true;
+  accessor wrapText: boolean;
 
   @property({ attribute: false })
   accessor yText!: Y.Text | Text;

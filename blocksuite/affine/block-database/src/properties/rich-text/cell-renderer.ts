@@ -31,6 +31,7 @@ import { HostContextKey } from '../../context/host-context.js';
 import type { DatabaseBlockComponent } from '../../database-block.js';
 import { richTextPropertyModelConfig } from './define.js';
 
+
 function toggleStyle(
   inlineEditor: AffineInlineEditor | null,
   attrs: AffineTextAttributes
@@ -205,17 +206,53 @@ export class RichTextCell extends BaseRichTextCell {
     }
   }
 
+  override disconnectedCallback() {
+  super.disconnectedCallback();
+  this._sub?.unsubscribe();
+}
   override connectedCallback() {
     super.connectedCallback();
     this.changeUserSelectAccordToReadOnly();
+
+
+    // this._sub = this.property.wrapChanged.subscribe(wrap => {
+    //   console.log('got wrap:', wrap);
+    //   this.requestUpdate();
+    // });
+
+    // this._sub = this.signalToObservable<boolean>(this.property.isWrapping$).subscribe(wrap => {
+    //   console.log(this.property);
+    //   console.log('signal changed:', wrap);
+    //   this.requestUpdate();
+    // });
+
+    // console.log(this.property);
+    // this._wrapSub = this.property.isWrapping$.subscribe(wrap => {
+    //   // wrap 改变时就会进到这里
+    //   console.log('isWrapping changed:', wrap);
+    //   // 在这里做你想做的事，比如触发一次 render
+    //   this.requestUpdate();
+    // });
+
+
+    // useEffect(() => {
+    //   const wrap = this.property.isWrapping$.value;
+    //   this.requestUpdate(); // 每次 isWrapping$ 改变，都会重新调用 render()
+    // });
   }
 
   override render() {
+
+
+    //console.log("Render cell :"+this.property.isWrapping$.value);
+    // console.log(this.view);
+    //debugger;
+
     if (!this.value || !(this.value instanceof Text)) {
       return html`<div class="affine-database-rich-text"></div>`;
     }
     return keyed(
-      this.value,
+      [this.value, this.property.wrapStatus],
       html`<rich-text
         .yText=${this.value}
         .attributesSchema=${this.attributesSchema}
@@ -223,6 +260,7 @@ export class RichTextCell extends BaseRichTextCell {
         .embedChecker=${this.inlineManager?.embedChecker}
         .markdownShortcutHandler=${this.inlineManager?.markdownShortcutHandler}
         .readonly=${true}
+        .wrapText=${this.property.wrapStatus}
         class="affine-database-rich-text inline-editor"
       ></rich-text>`
     );
@@ -490,6 +528,8 @@ export class RichTextCellEditing extends BaseRichTextCell {
     };
     this.addEventListener('keydown', selectAll);
     this.disposables.addFromEvent(this, 'keydown', selectAll);
+
+    
   }
 
   override firstUpdated() {
@@ -537,6 +577,7 @@ export class RichTextCellEditing extends BaseRichTextCell {
         this.topContenteditableElement?.host
           ? getViewportElement(this.topContenteditableElement.host)
           : null}
+      .wrapText=${true}
       class="affine-database-rich-text inline-editor"
     ></rich-text>`;
   }

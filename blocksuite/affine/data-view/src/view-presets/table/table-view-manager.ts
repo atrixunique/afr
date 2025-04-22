@@ -24,6 +24,10 @@ import type { ViewManager } from '../../core/view-manager/view-manager.js';
 import { DEFAULT_COLUMN_MIN_WIDTH, DEFAULT_COLUMN_WIDTH } from './consts.js';
 import type { TableViewData } from './define.js';
 import type { StatCalcOpType } from './types.js';
+import { title1Regular } from '@toeverything/theme/typography';
+
+import { Subject } from 'rxjs';
+
 
 export class TableSingleView extends SingleViewBase<TableViewData> {
   propertiesWithoutFilter$ = computed(() => {
@@ -297,6 +301,18 @@ export class TableSingleView extends SingleViewBase<TableViewData> {
     });
   }
 
+  propertyShowSet(): void {
+    this.dataUpdate(() => {
+      return {
+        columns: this.computedColumns$.value.map(v => ({
+          ...v,
+          hide: false,
+        })),
+      };
+    });
+  }
+
+
   propertyMove(columnId: string, toAfterOfColumn: InsertToPosition): void {
     this.dataUpdate(() => {
       const columnIndex = this.computedColumns$.value.findIndex(
@@ -314,6 +330,14 @@ export class TableSingleView extends SingleViewBase<TableViewData> {
         columns,
       };
     });
+  }
+
+
+  rowAddWithValue(insertPosition: InsertToPosition | number, value:string) {
+    const id = super.rowAdd(insertPosition);
+    const property=this.propertyIds$.value;
+    this.cellValueSet(id, property[0], value);
+    //console.log(property);
   }
 
   override rowAdd(
@@ -345,6 +369,8 @@ export class TableSingleView extends SingleViewBase<TableViewData> {
     return id;
   }
 
+
+
   override rowMove(
     rowId: string,
     position: InsertToPosition,
@@ -374,6 +400,9 @@ export class TableSingleView extends SingleViewBase<TableViewData> {
 }
 
 export class TableColumn extends PropertyBase {
+
+  dataRefList: string[] = [];
+
   statCalcOp$ = computed(() => {
     return this.tableView.columnGetStatCalcOp(this.id);
   });
@@ -391,7 +420,24 @@ export class TableColumn extends PropertyBase {
     columnId: string
   ) {
     super(tableView as SingleView, columnId);
+    
+    // if(this.dataRef$.value.length >0 && this.dataRefList.length==0) this.getDataRefList(this.dataRef$.value);
+    
   }
+
+  static _wrap = true;
+
+  public isWrapping$ :ReadonlySignal<boolean> = computed(() => this._wrap);
+  
+  get wrapStatus() {
+    return TableColumn._wrap;
+  }
+
+  set wrapStatus(val: boolean) {
+    TableColumn._wrap = val;
+  }
+
+  
 
   updateStatCalcOp(type?: string): void {
     return this.tableView.columnUpdateStatCalcOp(this.id, type);

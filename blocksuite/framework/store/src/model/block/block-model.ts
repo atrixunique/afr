@@ -5,6 +5,10 @@ import type { Text } from '../../reactive/index.js';
 import type { Store } from '../store/store.js';
 import type { YBlock } from './types.js';
 import type { BlockSchemaType } from './zod.js';
+import { nanoid } from 'nanoid';
+
+
+import {ParagraphBlockModel} from '../../../../../affine/model/src/blocks/paragraph/paragraph-model.js';
 
 type SignaledProps<Props> = Props & {
   [P in keyof Props & string as `${P}$`]: Signal<Props[P]>;
@@ -69,6 +73,17 @@ export class BlockModel<
 
   isEmpty() {
     return this.children.length === 0;
+  }
+
+  getOrder<T extends { order: string }>(array: T[], after?: number) {
+    after = after != null ? (after < 0 ? undefined : after) : undefined;
+    const prevOrder = after == null ? null : array[after]?.order;
+    const nextOrder = after == null ? array[0]?.order : array[after + 1]?.order;
+    const order = generateFractionalIndexingKeyBetween(
+      prevOrder ?? null,
+      nextOrder ?? null
+    );
+    return order;
   }
 
   keys!: string[];

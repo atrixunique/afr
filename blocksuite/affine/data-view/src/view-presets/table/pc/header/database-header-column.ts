@@ -251,18 +251,18 @@ export class DatabaseHeaderColumn extends SignalWatcher(
           //     ]
           //   : []),
           // Number format end
-          // menu.group({
-          //   items: [
-          //     menu.action({
-          //       name: 'Hide In View',
-          //       prefix: ViewIcon(),
-          //       hide: () => !this.column.hideCanSet,
-          //       select: () => {
-          //         this.column.hideSet(true);
-          //       },
-          //     }),
-          //   ],
-          // }),
+          menu.group({
+            items: [
+              menu.action({
+                name: '隐藏列',
+                prefix: ViewIcon(),
+                hide: () => !this.column.hideCanSet,
+                select: () => {
+                  this.column.hideSet(true);
+                },
+              }),
+            ],
+          }),
           menu.group({
             items: [
               menu.action({
@@ -388,6 +388,29 @@ export class DatabaseHeaderColumn extends SignalWatcher(
               }),
             ],
           }),
+          menu.group({
+            items: [
+              menu.toggleSwitch({
+                name: '换行',
+                on: this.column.wrapStatus,
+                hide: () => this.column.type$.value == 'rich-text'? false : true,
+                onChange: on => {
+
+                    // console.log(" Toggle set to:" +on);
+                    // console.log(this.tableViewManager);
+
+                    //debugger;
+                    
+                    this.column.wrapStatus= on;
+                    this.column.updateWidth(this.column.width$.value);
+
+                  //databaseBlock.renderBlock();
+                  ///console.log(databaseBlock);
+                },
+              }),
+            ],
+          }),
+
         ],
       },
     });

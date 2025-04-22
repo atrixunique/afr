@@ -37,7 +37,9 @@ export const QuickSearchModal = ({
             })}
             className={styles.modalContent}
             data-state={status}
+            aria-describedby=''
           >
+            <Dialog.Title></Dialog.Title>
             {children}
           </Dialog.Content>
         </div>

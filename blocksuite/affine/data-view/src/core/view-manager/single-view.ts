@@ -87,6 +87,8 @@ export interface SingleView {
   propertyDelete(propertyId: string): void;
   propertyCanDelete(propertyId: string): boolean;
 
+  
+
   propertyDuplicate(propertyId: string): void;
   propertyCanDuplicate(propertyId: string): boolean;
 
@@ -140,6 +142,7 @@ export interface SingleView {
   lockRows(lock: boolean): void;
 
   isLocked$: ReadonlySignal<boolean>;
+  
 }
 
 export abstract class SingleViewBase<
@@ -161,6 +164,7 @@ export abstract class SingleViewBase<
   isLocked$ = computed(() => {
     return this.lockRows$.value;
   });
+
 
   abstract mainProperties$: ReadonlySignal<MainProperties>;
 
@@ -235,6 +239,10 @@ export abstract class SingleViewBase<
   propertyCanDelete(propertyId: string): boolean {
     return this.dataSource.propertyCanDelete(propertyId);
   }
+
+ 
+
+
   propertyCanDuplicate(propertyId: string): boolean {
     return this.dataSource.propertyCanDuplicate(propertyId);
   }
@@ -246,6 +254,9 @@ export abstract class SingleViewBase<
   }
 
   private searchRowsMapping(rows: string[], searchString: string): string[] {
+
+    //debugger;
+
     return rows.filter(id => {
       if (searchString) {
         const containsSearchString = this.propertyIds$.value.some(
@@ -298,15 +309,26 @@ export abstract class SingleViewBase<
 
   cellStringValueGet(rowId: string, propertyId: string): string | undefined {
     const type = this.propertyTypeGet(propertyId);
+
+    // console.log(type);
+    // console.log(this.dataSource.propertyMetaGet(type));
+    // console.log(this.dataSource.cellValueGet(rowId, propertyId));
+
+
     if (!type) {
       return;
     }
-    return (
+
+    const ret=(
       this.dataSource.propertyMetaGet(type).config.cellToString({
         value: this.dataSource.cellValueGet(rowId, propertyId),
         data: this.propertyDataGet(propertyId),
+        dataSource: this.dataSource,
       }) ?? ''
     );
+    // console.log(ret);
+    // console.log('-------');
+    return ret;
   }
 
   cellValueGet(rowId: string, propertyId: string): unknown {

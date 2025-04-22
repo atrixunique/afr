@@ -14,7 +14,28 @@ export const titlePropertyModelConfig = titleColumnType.modelConfig<Text>({
   },
   type: () => t.richText.instance(),
   defaultData: () => ({}),
-  cellToString: ({ value }) => value?.toString() ?? '',
+  cellToString: ({ value, data, dataSource }) => {
+
+    //console.log(dataSource);
+
+    if (!value) return null;
+    const host = dataSource.contextGet(HostContextKey);
+    if (host) {
+      const collection = host.std.workspace;
+      const deltas = value.deltas$.value;
+      const text = deltas
+        .map(delta => {
+          if (isLinkedDoc(delta)) {
+            const linkedDocId = delta.attributes?.reference?.pageId as string;
+            return collection.getDoc(linkedDocId)?.meta?.title;
+          }
+          return delta.insert;
+        })
+        .join('');
+      return text;
+    }
+    return value?.toString() ?? null;
+  },
   cellFromString: ({ value }) => {
     return {
       value: value,

@@ -87,15 +87,7 @@ export const styles = css`
     display: flex;
     /* flex-direction: column; */
     gap: 4px;
-  }
-
-  .select-option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 4px 4px 0;
-    border-radius: 4px;
-    cursor: pointer;
+    flex-wrap: wrap;
   }
 
   .tag-container {
@@ -112,6 +104,19 @@ export const styles = css`
     border: 1px solid ${unsafeCSSVarV2('database/border')};
     user-select: none;
   }
+
+  /*
+  .select-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 4px 4px 0;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+    */
+
+
 
   .tag-text {
     font-size: 14px;

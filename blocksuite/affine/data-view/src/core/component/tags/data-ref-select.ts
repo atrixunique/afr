@@ -36,7 +36,10 @@ import {
 import { verticalListSortingStrategy } from '../../utils/wc-dnd/sort/strategies/index.js';
 import { arrayMove } from '../../utils/wc-dnd/utils/array-move.js';
 import { getTagColor, selectOptionColors } from './colors.js';
+import {DatabaseBlockComponent} from '@blocksuite/blocks/database';
+
 import { styles } from './styles.js';
+import { notify } from '@affine/component';
 
 type RenderOption = {
   value: string;
@@ -51,7 +54,10 @@ export class DataRefSelect extends SignalWatcher(
 ) {
   static override styles = styles;
 
-  private _clickItemOption = (e: MouseEvent, id: string) => {
+  private readonly _clickItemOption = (e: MouseEvent, id: string) => {
+
+    //console.log(this.options);
+
     e.stopPropagation();
     const option = this.options.value.find(v => v.id === id);
 
@@ -108,8 +114,45 @@ export class DataRefSelect extends SignalWatcher(
   };
 
   private _createOption = () => {
+
     const value = this.text.value.trim();
     if (value === '') return;
+
+    //Add new row to the target table
+
+    const tableName = this.options.value.length>0? this.options.value[0].tableName : "";
+    if(tableName === "") return;
+
+    const dataDoc = this.options.value[0].dataDoc;
+    
+    //console.log(dataDoc);
+    dataDoc.model.addRowWithValue(value);
+    notify.success({
+      title: '成功',
+      message: '值"' + value + '"已添加到表格"' + tableName+ '"',
+    });
+    this.editComplete();
+
+
+    
+    //dbc.view.view.rowAddWithValue(0, "Atrix");
+
+    // const databases:DatabaseBlockComponent=realDoc.getBlocksByFlavour('affine:database');
+    
+    // databases.forEach(dataDoc => {
+    //   if (dataDoc.model.title.toString() == tableName) {
+      
+        
+    //     //console.log(dataDoc.closest<DatabaseBlockComponent>('affine-database'));
+      
+    //   }
+    // });
+
+
+    return;
+
+
+
     const tagColor = this.color;
     this.clearColor();
     const newSelect: SelectTag = {
@@ -120,12 +163,14 @@ export class DataRefSelect extends SignalWatcher(
     this.newTags([newSelect]);
     const newValue = this.isSingleMode
       ? [newSelect.id]
-      : [...this.value, newSelect.id];
+      : [...this.value, newSelect.value];
     this.onChange(newValue);
     this.text.value = '';
     if (this.isSingleMode) {
       this.editComplete();
     }
+
+    //console.log(this.value);
   };
 
   private _currentColor: string | undefined = undefined;
@@ -181,8 +226,12 @@ export class DataRefSelect extends SignalWatcher(
   accessor options!: ReadonlySignal<SelectTag[]>;
 
   filteredOptions$ = computed(() => {
+
     let matched = false;
     const options: RenderOption[] = [];
+
+    //debugger;
+
     for (const option of this.options.value) {
       if (
         !this.text.value ||
@@ -209,6 +258,7 @@ export class DataRefSelect extends SignalWatcher(
         select: this._createOption,
       });
     }
+
     return options;
   });
 
@@ -293,6 +343,7 @@ export class DataRefSelect extends SignalWatcher(
   }
 
   private renderInput() {
+
     return html`
       <div class="tag-select-input-container">
         ${this.value.map(id => {
@@ -320,6 +371,7 @@ export class DataRefSelect extends SignalWatcher(
     const style = styleMap({
       backgroundColor: color,
     });
+    
     return html` <div class="tag-container" style=${style}>
       <div class="tag-text" style="cursor:pointer">${name}</div>
       ${onDelete
@@ -335,6 +387,8 @@ export class DataRefSelect extends SignalWatcher(
   }
 
   private renderTags() {
+    //log(this.filteredOptions$);
+    
     return html`
       <div
         style="height: 0.5px;background-color: ${cssVarV2(
@@ -349,17 +403,28 @@ export class DataRefSelect extends SignalWatcher(
           (select, index) => {
             const isSelected = index === this.selectedIndex;
 
-            const clickOption = (e: MouseEvent) => {
-              e.stopPropagation();
-              this._clickItemOption(e, select.id);
-            };
+
             return html`
-              <div @click="${select.select}">
-                ${!select.isCreate
-                  ? this.renderTag(select.value, select.color)
-                  : nothing}
-              </div>
-            `;
+                <div
+                  ${!select.isCreate ? sortable(select.id) : nothing}
+                  @click="${select.select}"
+                >
+   
+                    ${select.isCreate
+                      ? html` <div class="select-option-new-icon">新建</div>`
+                      : html``}
+                    ${this.renderTag(select.value, select.color)}
+               
+                </div>
+              `;
+
+            // return html`
+            //   <div @click="${select.select}">
+            //     ${!select.isCreate
+            //       ? this.renderTag(select.value, select.color)
+            //       : nothing}
+            //   </div>
+            // `;
           }
         )}
       </div>
@@ -392,6 +457,9 @@ export class DataRefSelect extends SignalWatcher(
 
   override render() {
     this.setSelectedOption(this.selectedIndex);
+
+    // debugger;
+
     return html` ${this.renderInput()} ${this.renderTags()} `;
   }
 
@@ -436,7 +504,8 @@ export const popRefSelect = (
     container?: HTMLElement;
   }
 ) => {
-  const component = new DataRefSelect();
+
+   const component = new DataRefSelect();
   if (ops.mode) {
     component.mode = ops.mode;
   }

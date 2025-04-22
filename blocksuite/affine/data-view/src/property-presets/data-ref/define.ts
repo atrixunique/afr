@@ -34,8 +34,10 @@ export const dataRefPropertyModelConfig = dataRefPropertyType.modelConfig<
     }
     return [];
   },
-  cellToString: ({ value, data }) =>
-    value?.map(id => data.options.find(v => v.id === id)?.value).join(','),
+  // cellToString: ({ value, data }) =>
+  //   value?.map(id => data.options.find(v => v.id === id)?.value).join(','),
+  cellToString: ({ value, data }) => 
+    value?.filter(item => item.includes('-')).map(item => item.split('-')[1]).join(','),
   cellFromString: ({ value: oldValue, data }) => {
     const optionMap = Object.fromEntries(data.options.map(v => [v.value, v]));
     const optionNames = oldValue
@@ -62,6 +64,14 @@ export const dataRefPropertyModelConfig = dataRefPropertyType.modelConfig<
       value,
       data: data,
     };
+  },
+  cellFromJson: ({ value, data }) => {
+    if (!value) return [];
+    const optionMap = Object.fromEntries(data.options.map(v => [v.id, v]));
+    return value
+      .map(id => optionMap[id])
+      .filter(option => option != null)
+      .map(option => option.id);
   },
   cellToJson: ({ value }) => value ?? null,
   isEmpty: ({ value }) => value == null || value.length === 0,

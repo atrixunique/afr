@@ -36,11 +36,13 @@ import {
   uniMap,
 } from '@blocksuite/data-view';
 import { widgetPresets } from '@blocksuite/data-view/widget-presets';
+import type { TableSingleView } from '@blocksuite/data-view'; // Ensure this is the correct path for TableSingleView
 import { Rect } from '@blocksuite/global/utils';
 import {
   CopyIcon,
   DeleteIcon,
   MoreHorizontalIcon,
+  ExpandFullIcon
 } from '@blocksuite/icons/lit';
 import { Slice } from '@blocksuite/store';
 import { autoUpdate } from '@floating-ui/dom';
@@ -133,12 +135,31 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<DatabaseBloc
               class: {
                 'delete-item': true,
               },
-              name: 'Delete Database',
+              name: '删除数据表',
               select: () => {
                 this.model.children.slice().forEach(block => {
                   this.doc.deleteBlock(block);
                 });
                 this.doc.deleteBlock(this.model);
+              },
+            }),
+          ],
+        }),
+        menu.group({
+          items: [
+            menu.action({
+              prefix: ExpandFullIcon(),
+              class: {
+                'delete-item': true,
+              },
+              name: '显示所有列',
+              select: () => {
+                const tsv:TableSingleView=this.view.view;
+                //console.log(tsv);
+                tsv.propertyShowSet();
+                // const m=this.model;
+                // console.log(document.querySelector('affine-database') as DatabaseBlockComponent);
+                // debugger;
               },
             }),
           ],

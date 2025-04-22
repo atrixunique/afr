@@ -138,7 +138,7 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
   tooltipTimeout: 800,
   items: [
     // ---------------------------------------------------------
-    { groupName: 'Basic' },
+    { groupName: '基本' },
     ...textConversionConfigs
       .filter(i => i.type && ['h1', 'h2', 'h3', 'text'].includes(i.type))
       .map(createConversionItem),
@@ -219,7 +219,7 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
     },
     // {
     //   name: 'Linked Doc',
-    //   description: 'Link to another document.',
+    //   description: '新建页面链接',
     //   icon: LinkedDocIcon,
     //   tooltip: slashMenuToolTips['Linked Doc'],
     //   alias: ['dual link'],
@@ -229,13 +229,14 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
     //       'affine-linked-doc-widget',
     //       rootComponent.model.id
     //     );
+
     //     if (!linkedDocWidget) return false;
 
     //     return model.doc.schema.flavourSchemaMap.has('affine:embed-linked-doc');
     //   },
     //   action: ({ model, rootComponent }) => {
     //     const { std } = rootComponent;
-
+        
     //     const linkedDocWidget = std.view.getWidget(
     //       'affine-linked-doc-widget',
     //       rootComponent.model.id
@@ -291,28 +292,30 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         if (success) await ctx.insertedImageIds;
       },
     },
-    {
-      name: 'Link',
-      description: '新建页面链接',
-      icon: LinkIcon,
-      tooltip: slashMenuToolTips['Link'],
-      showWhen: ({ model }) =>
-        model.doc.schema.flavourSchemaMap.has('affine:bookmark'),
-      action: async ({ rootComponent, model }) => {
-        const parentModel = rootComponent.doc.getParent(model);
-        if (!parentModel) {
-          return;
-        }
-        const index = parentModel.children.indexOf(model) + 1;
-        await toggleEmbedCardCreateModal(
-          rootComponent.host,
-          'Links',
-          'The added link will be displayed as a card view.',
-          { mode: 'page', parentModel, index }
-        );
-        tryRemoveEmptyLine(model);
-      },
-    },
+    // {
+    //   name: 'Link',
+    //   description: '新建页面链接',
+    //   icon: LinkIcon,
+    //   tooltip: slashMenuToolTips['Link'],
+    //   showWhen: ({ model }) =>
+    //     model.doc.schema.flavourSchemaMap.has('affine:bookmark'),
+    //   action: async ({ rootComponent, model }) => {
+
+    //     const parentModel = rootComponent.doc.getParent(model);
+    //     if (!parentModel) {
+    //       return;
+    //     }
+
+    //     const index = parentModel.children.indexOf(model) + 1;
+    //     await toggleEmbedCardCreateModal(
+    //       rootComponent.host,
+    //       'Links',
+    //       'The added link will be displayed as a card view.',
+    //       { mode: 'page', parentModel, index }
+    //     );
+    //     tryRemoveEmptyLine(model);
+    //   },
+    // },
     {
       name: 'Attachment',
       description: '插入文件附件',
@@ -450,64 +453,64 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
     // TODO(@L-Sun): Linear
 
     // ---------------------------------------------------------
-    ({ model, rootComponent }) => {
-      const { doc } = rootComponent;
+    // ({ model, rootComponent }) => {
+    //   const { doc } = rootComponent;
 
-      const surfaceModel = getSurfaceBlock(doc);
-      if (!surfaceModel) return [];
+    //   const surfaceModel = getSurfaceBlock(doc);
+    //   if (!surfaceModel) return [];
 
-      const parent = doc.getParent(model);
-      if (!parent) return [];
+    //   const parent = doc.getParent(model);
+    //   if (!parent) return [];
 
-      const frameModels = doc
-        .getBlocksByFlavour('affine:frame')
-        .map(block => block.model as FrameBlockModel);
+    //   const frameModels = doc
+    //     .getBlocksByFlavour('affine:frame')
+    //     .map(block => block.model as FrameBlockModel);
 
-      const frameItems = frameModels.map<SlashMenuActionItem>(frameModel => ({
-        name: 'Frame: ' + frameModel.title,
-        icon: FrameIcon,
-        action: ({ rootComponent }) => {
-          rootComponent.std.command
-            .chain()
-            .pipe(getSelectedModelsCommand)
-            .pipe(insertSurfaceRefBlockCommand, {
-              reference: frameModel.id,
-              place: 'after',
-              removeEmptyLine: true,
-            })
-            .run();
-        },
-      }));
+    //   const frameItems = frameModels.map<SlashMenuActionItem>(frameModel => ({
+    //     name: 'Frame: ' + frameModel.title,
+    //     icon: FrameIcon,
+    //     action: ({ rootComponent }) => {
+    //       rootComponent.std.command
+    //         .chain()
+    //         .pipe(getSelectedModelsCommand)
+    //         .pipe(insertSurfaceRefBlockCommand, {
+    //           reference: frameModel.id,
+    //           place: 'after',
+    //           removeEmptyLine: true,
+    //         })
+    //         .run();
+    //     },
+    //   }));
 
-      const groupElements = surfaceModel.getElementsByType('group');
-      const groupItems = groupElements.map(group => ({
-        name: 'Group: ' + group.title.toString(),
-        icon: GroupingIcon(),
-        action: () => {
-          rootComponent.std.command
-            .chain()
-            .pipe(getSelectedModelsCommand)
-            .pipe(insertSurfaceRefBlockCommand, {
-              reference: group.id,
-              place: 'after',
-              removeEmptyLine: true,
-            })
-            .run();
-        },
-      }));
+    //   const groupElements = surfaceModel.getElementsByType('group');
+    //   const groupItems = groupElements.map(group => ({
+    //     name: 'Group: ' + group.title.toString(),
+    //     icon: GroupingIcon(),
+    //     action: () => {
+    //       rootComponent.std.command
+    //         .chain()
+    //         .pipe(getSelectedModelsCommand)
+    //         .pipe(insertSurfaceRefBlockCommand, {
+    //           reference: group.id,
+    //           place: 'after',
+    //           removeEmptyLine: true,
+    //         })
+    //         .run();
+    //     },
+    //   }));
 
-      const items = [...frameItems, ...groupItems];
-      if (items.length !== 0) {
-        return [
-          {
-            groupName: 'Document Group & Frame',
-          },
-          ...items,
-        ];
-      } else {
-        return [];
-      }
-    },
+    //   const items = [...frameItems, ...groupItems];
+    //   if (items.length !== 0) {
+    //     return [
+    //       {
+    //         groupName: 'Document Group & Frame',
+    //       },
+    //       ...items,
+    //     ];
+    //   } else {
+    //     return [];
+    //   }
+    // },
 
     // ---------------------------------------------------------
     // { groupName: 'Date' },
@@ -606,6 +609,8 @@ export const defaultSlashMenuConfig: SlashMenuConfig = {
         !!model.doc.get(FeatureFlagService).getFlag('enable_block_query'),
 
       action: ({ model, rootComponent }) => {
+
+
         const parent = rootComponent.doc.getParent(model);
         if (!parent) return;
         const index = parent.children.indexOf(model);

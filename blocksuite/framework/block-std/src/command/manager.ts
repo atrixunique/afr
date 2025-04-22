@@ -251,6 +251,7 @@ export class CommandManager extends LifeCycleWatcher {
 
 function runCmds(ctx: InitCommandCtx, [cmd, ...rest]: Command[]) {
   let _ctx = ctx;
+
   if (cmd) {
     cmd(ctx, data => {
       _ctx = runCmds({ ...ctx, ...data }, rest);

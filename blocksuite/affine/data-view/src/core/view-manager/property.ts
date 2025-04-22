@@ -28,6 +28,8 @@ export interface Property<
   readonly duplicate?: () => void;
   get canDuplicate(): boolean;
 
+
+
   cellGet(rowId: string): Cell<Value>;
 
   readonly data$: ReadonlySignal<Data>;
@@ -42,6 +44,8 @@ export interface Property<
 
   readonly dataRef$: ReadonlySignal<string>;
   dataRefSet(dataRef: string): void;
+
+
 
   readonly hide$: ReadonlySignal<boolean>;
   hideSet(hide: boolean): void;
@@ -135,6 +139,8 @@ export abstract class PropertyBase<
     public view: SingleView,
     public propertyId: string
   ) {}
+
+
   get canDelete(): boolean {
     return this.view.propertyCanDelete(this.id);
   }

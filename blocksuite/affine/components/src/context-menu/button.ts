@@ -251,9 +251,10 @@ export const menuButtonItems = {
       label?: () => TemplateResult;
       onChange: (on: boolean) => void;
       class?: ClassInfo;
+      hide?: () => boolean;
     }) =>
     menu => {
-      if (!menu.search(config.name)) {
+      if (config.hide?.() || !menu.search(config.name)) {
         return;
       }
       const onChange = (on: boolean) => {

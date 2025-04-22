@@ -1,5 +1,7 @@
 import { popupTargetFromElement } from '@blocksuite/affine-components/context-menu';
 import { computed } from '@preact/signals-core';
+import { effect, type ReadonlySignal } from '@preact/signals-core';
+
 import { html } from 'lit/static-html.js';
 
 import type { SelectTag } from '../../core/index.js';
@@ -11,40 +13,146 @@ import { createFromBaseCellRenderer } from '../../core/property/renderer.js';
 import { createIcon } from '../../core/utils/uni-icon.js';
 import { dataRefPropertyModelConfig } from './define.js';
 
+import { isLinkedDoc } from '../../../../block-database/src/utils/title-doc.js';
+import type { WorkspaceImpl } from '@affine/core/modules/workspace/impls/workspace.js';
+
+const analyzeDoc = async (workspace:WorkspaceImpl, docId:string, tableName:string, renderer) => {
+
+  //console.log('analyzeDoc', docId, tableName);
+
+  const dataRefList:string[]=[];
+  const realDoc= workspace.getDoc(docId);
+  
+  if (!realDoc) {
+    console.error('Document not found:', docId);
+    return [];
+  }
+  if (!realDoc.loaded) {
+    try {
+      realDoc.load();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  if(realDoc.meta.trash)  return;
+  if (!realDoc.root) {
+    await new Promise<void>(resolve => {
+      realDoc.slots.rootAdded.once(() => {
+        resolve();
+      });
+    });
+  }
+
+  const databases=realDoc.getBlocksByFlavour('affine:database');
+  databases.forEach(dataDoc => {
+    if (dataDoc.model.title.toString() == tableName) {
+      
+      //console.log('found table '+ tableName);
+
+      const targetModel = dataDoc.model;
+      //console.log(targetModel);
+
+      targetModel.children.forEach(element => {
+          const deltas = element.text.deltas$.value;
+          deltas.map(delta => {
+              let rowText="";
+              let linkText="";
+              if (isLinkedDoc(delta)) {
+                const linkedDocId = delta.attributes?.reference?.pageId as string;
+                rowText=workspace.getDoc(linkedDocId)?.meta?.title;
+                linkText=linkedDocId;   
+              }
+              else rowText=delta.insert;
+              //console.log("rowText",rowText);
+
+              dataRefList.push({
+                id: tableName + '-' + rowText,
+                value: rowText,
+                link: linkText,
+                color: 'var(--affine-tag-blue)',
+                dataDoc: dataDoc,
+                tableName: tableName,
+                // dbc: renderer.closest<DatabaseBlockComponent>('affine-database'),
+
+                  });
+              })
+          });
+    }
+  });
+  //console.log(dataRefList);
+  
+  return dataRefList;
+}
+
+// function createNewOptions<T, P>(renderer: BaseCellRenderer<T, P>) {
+
+  
+//   return computed( () => {
+//     const workspace=renderer.view.dataSource.doc.workspace;
+//     const fullDocs=workspace.docs;
+//     const tableName = renderer.property.dataRef$.value;
+
+//     fullDocs.forEach(d => {
+      
+//       let singleRefList = analyzeDoc(workspace, d.id, tableName);
+            
+//       if(singleRefList.length>0)  {
+        
+//         return singleRefList;
+//       }
+//     });
+//   return [];
+//   });
+// }
+
 export class DataRefCell extends BaseCellRenderer<
   string[],
   SelectPropertyData
 > {
-  private newOptions$ = computed(() => {
-    const tableName = this.property.dataRef$.value;
-    const workspace=this.property.view?.dataSource.doc.workspace;
-    const fullDocs=workspace.docs;
 
-    // const fullDocs = this.property.view?.dataSource.doc.collection.docs;
-    const optionArray = [];
+  private newOptions$: ReadonlySignal<SelectTag[]>=[];
 
-    fullDocs.forEach(d => {
-      const realDoc=workspace.getDoc(d.id);
-      if (!realDoc.meta.trash) {
-        realDoc.getBlocksByFlavour('affine:database').forEach(dataDoc => {
-          if (dataDoc.model.title.toString() == tableName) {
-            const targetModel = dataDoc.model;
-            targetModel.children.forEach(element => {
-              optionArray.push({
-                id: tableName + '-' + element.text.toString(),
-                value: element.text.toString(),
-                color: 'var(--affine-tag-blue)',
-              });
-            });
-          }
-        });
-      }
-    });
-    //console.log(optionArray);
-    return optionArray;
-  });
+  override connectedCallback() {
+    super.connectedCallback();
+   
+      const workspace = this.view.dataSource.doc.workspace;
+      const tableName = this.property.dataRef$.value;
+    
+      // 调用异步函数，但不要在 effect 里直接用 then
+      this.updateOptionsAsync(workspace, tableName);
+  }
+
+  private async updateOptionsAsync(workspace: Workspace, tableName: string) {
+    
+    const fullDocs = workspace.docs;
+
+    const docs: any[] = Array.isArray(fullDocs)
+      ? fullDocs
+      : Array.from(fullDocs ?? []);
+  
+    if (docs.length === 0) return;
+    // debugger;
+    const results = await Promise.all(
+      docs.map(async d => {
+        // console.log('analyzeDoc', d[0], tableName);
+        return await analyzeDoc(workspace, d[0], tableName, this);
+      })
+    );
+    
+    
+    const filtered = results.find(list => list && list.length > 0) || [];
+    
+    this.newOptions$.value = filtered;
+    this.forceUpdate();
+  }
+
 
   override render() {
+    
+    //console.log(this.newOptions$.value);
+    //console.log("cell render");
+    if(!this.newOptions$.value) return html``;
+
     return html`
       <affine-data-ref-view
         .value="${Array.isArray(this.value) ? this.value : []}"
@@ -58,36 +166,39 @@ export class DataRefCellEditing extends BaseCellRenderer<
   string[],
   SelectPropertyData
 > {
-    private newOptions$ = computed(() => {
-      const tableName = this.property.dataRef$.value;
-      const workspace=this.property.view?.dataSource.doc.workspace;
-      const fullDocs=workspace.docs;
+  // private newOptions$ = createNewOptions(this);
 
-      // const fullDocs = this.property.view?.dataSource.doc.collection.docs;
-      const optionArray = [];
+  private newOptions$: ReadonlySignal<SelectTag[]>=[];
 
-      fullDocs.forEach(d => {
-        const realDoc=workspace.getDoc(d.id);
-        if (!realDoc.meta.trash) {
-          realDoc.getBlocksByFlavour('affine:database').forEach(dataDoc => {
-            if (dataDoc.model.title.toString() == tableName) {
-              const targetModel = dataDoc.model;
-              targetModel.children.forEach(element => {
-                optionArray.push({
-                  id: tableName + '-' + element.text.toString(),
-                  value: element.text.toString(),
-                  color: 'var(--affine-tag-blue)',
-                });
-              });
-            }
-          });
-        }
-      });
-      //console.log(optionArray);
-      return optionArray;
-    });
+  private async updateOptionsAsync(workspace: Workspace, tableName: string) {
+    
+    const fullDocs = workspace.docs;
+    const docs: any[] = Array.isArray(fullDocs)
+      ? fullDocs
+      : Array.from(fullDocs ?? []);
+  
+    if (docs.length === 0) return;
+    // debugger;
+    const results = await Promise.all(
+      docs.map(async d => {
+        // console.log('analyzeDoc', d[0], tableName);
+        return await analyzeDoc(workspace, d[0], tableName, this);
+      })
+    );
+    
+    const filtered = results.find(list => list && list.length > 0) || []; 
+    this.newOptions$.value = filtered;
+  }
 
-  private popRefSelect = () => {
+  private popRefSelect = async() => {
+
+    const workspace = this.view.dataSource.doc.workspace;
+    const tableName = this.property.dataRef$.value;
+  
+    // 调用异步函数，但不要在 effect 里直接用 then
+    await this.updateOptionsAsync(workspace, tableName);
+
+
     this._disposables.add({
       dispose: popRefSelect(
         popupTargetFromElement(
@@ -96,7 +207,7 @@ export class DataRefCellEditing extends BaseCellRenderer<
         {
           options: this.options$,
           onOptionsChange: this._onOptionsChange,
-          value: this._value,
+          value: Array.isArray(this.value) ? this.value : [],
           onChange: this._onChange,
           onComplete: this._editComplete,
           minWidth: 400,
@@ -132,13 +243,14 @@ export class DataRefCellEditing extends BaseCellRenderer<
   }
 
   override firstUpdated() {
+    //console.log('firstUpdated');
     this.popRefSelect();
   }
 
   override render() {
     return html`
       <affine-data-ref-view
-        .value="${this._value}"
+        .value="${Array.isArray(this.value) ? this.value : []}"
         .options="${this.newOptions$.value}"
       ></affine-data-ref-view>
     `;

@@ -41,32 +41,71 @@ export class DataRefView extends WithDisposable(ShadowlessElement) {
       padding: 0 8px;
       border-radius: 4px;
       white-space: nowrap;
-      background: var(--affine-tag-white);
+      background-color: var(--affine-tag-white);
       overflow: hidden;
       text-overflow: ellipsis;
       border: 1px solid ${unsafeCSSVarV2('database/border')};
     }
+
+    .affine-select-cell-container .select-link {
+      background-color: var(--affine-tag-red);
+    }
   `;
 
   override render() {
+
     const values = this.value;
+    //const values = ["组织-HKDC"];
+        
+  
     const map = new Map<string, SelectTag>(this.options?.map(v => [v.id, v]));
-    return html`
+  
+
+     return html`
       <div contenteditable="false" class="affine-select-cell-container">
         ${repeat(values, id => {
+
           const option = map.get(id);
+
+          //console.log(option);
+          
           if (!option) {
             return;
           }
           const style = styleMap({
             backgroundColor: getColorByColor(option.color),
           });
-          return html`<span class="select-selected" style=${style}
-            >${option.value}</span
-          >`;
+
+          //console.log(option.link);
+          if(option.link === undefined || option.link === "") 
+            return html`
+              <span 
+                class="select-selected" 
+                style=${style} >
+                ${option.value}
+              </span>
+            `;
+          
+          else 
+            return html`
+                <span 
+                  class="select-selected select-link" 
+                  style=${style + ';cursor:pointer;'}
+                  @click=${() => this.onJump(this, option.link)}
+                  title=${"打开 " + option.value + " 页面"}>
+                  ${option.value}
+                </span>
+              `;
         })}
       </div>
     `;
+  }
+
+  private onJump = (renderer, link: string) => { 
+    // debugger;
+    const ownerURL=this.ownerDocument.location.href;
+    const newUrl = ownerURL.replace(/\/[^\/]*$/, "/" + link);
+    window.open(newUrl, "_blank");
   }
 
   @property({ attribute: false })
@@ -77,6 +116,7 @@ export class DataRefView extends WithDisposable(ShadowlessElement) {
 
   @property({ attribute: false })
   accessor value: string[] = [];
+
 }
 
 declare global {

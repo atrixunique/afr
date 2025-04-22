@@ -499,8 +499,6 @@ export class TransferController {
 
 
  
- 
-
 
 private pushChildren(block: Map<any>) {
   const children = block.get('sys:children') as Array<string> | undefined;
