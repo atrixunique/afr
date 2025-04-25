@@ -71,7 +71,10 @@ const analyzeDoc = async (workspace:WorkspaceImpl, docId:string, tableName:strin
                 link: linkText,
                 color: 'var(--affine-tag-blue)',
                 dataDoc: dataDoc,
-                tableName: tableName,
+                workspace:workspace,
+                renderer: renderer,
+                targetTableName: tableName,
+                thisTableName: renderer.property.tableView.dataSource._model.title.toString(),
                 // dbc: renderer.closest<DatabaseBlockComponent>('affine-database'),
 
                   });
@@ -151,6 +154,8 @@ export class DataRefCell extends BaseCellRenderer<
     
     //console.log(this.newOptions$.value);
     //console.log("cell render");
+    //console.log(this.value);
+
     if(!this.newOptions$.value) return html``;
 
     return html`
@@ -191,6 +196,12 @@ export class DataRefCellEditing extends BaseCellRenderer<
   }
 
   private popRefSelect = async() => {
+
+    //被动参照其它数据表的单元格不可编辑 
+    if(this.property.name$.value.startsWith('[相关]')) {
+      this.selectCurrentCell(false);
+      return;
+    }
 
     const workspace = this.view.dataSource.doc.workspace;
     const tableName = this.property.dataRef$.value;

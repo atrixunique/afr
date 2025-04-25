@@ -40,6 +40,9 @@ import {DatabaseBlockComponent} from '@blocksuite/blocks/database';
 
 import { styles } from './styles.js';
 import { notify } from '@affine/component';
+import { isLinkedDoc } from '../../../../../block-database/src/utils/title-doc.js';
+
+import * as Y from 'yjs';
 
 type RenderOption = {
   value: string;
@@ -120,38 +123,21 @@ export class DataRefSelect extends SignalWatcher(
 
     //Add new row to the target table
 
-    const tableName = this.options.value.length>0? this.options.value[0].tableName : "";
-    if(tableName === "") return;
+    const targetTableName = this.options.value.length>0? this.options.value[0].targetTableName : "";
+    if(targetTableName === "") return;
 
     const dataDoc = this.options.value[0].dataDoc;
     
     //console.log(dataDoc);
     dataDoc.model.addRowWithValue(value);
+
     notify.success({
       title: '成功',
-      message: '值"' + value + '"已添加到表格"' + tableName+ '"',
+      message: '值"' + value + '"已添加到表格"' + targetTableName+ '"',
     });
     this.editComplete();
 
-
-    
-    //dbc.view.view.rowAddWithValue(0, "Atrix");
-
-    // const databases:DatabaseBlockComponent=realDoc.getBlocksByFlavour('affine:database');
-    
-    // databases.forEach(dataDoc => {
-    //   if (dataDoc.model.title.toString() == tableName) {
-      
-        
-    //     //console.log(dataDoc.closest<DatabaseBlockComponent>('affine-database'));
-      
-    //   }
-    // });
-
-
     return;
-
-
 
     const tagColor = this.color;
     this.clearColor();
@@ -175,10 +161,7 @@ export class DataRefSelect extends SignalWatcher(
 
   private _currentColor: string | undefined = undefined;
 
-  private _onDeleteSelected = (selectedValue: string[], value: string) => {
-    const filteredValue = selectedValue.filter(item => item !== value);
-    this.onChange(filteredValue);
-  };
+ 
 
   private _onInput = (event: KeyboardEvent) => {
     this.text.value = (event.target as HTMLInputElement).value;
@@ -202,6 +185,99 @@ export class DataRefSelect extends SignalWatcher(
     }
   };
 
+
+
+
+  // cellValueChange(rowId: string, propertyId: string, value: unknown): void {
+  //   const viewColumn = this.getViewColumn(propertyId);
+  //   if (viewColumn) {
+  //     this.block.cells[rowId] = {
+  //       ...this.block.cells[rowId],
+  //       [propertyId]: value,
+  //     };
+  //     return;
+  //   }
+  //   const block = this.blockMap.get(rowId);
+  //   if (block) {
+  //     this.meta.properties
+  //       .find(v => v.key === propertyId)
+  //       ?.set?.(block.model, value);
+  //   }
+  // }
+
+
+  private getPrimaryKey():string { 
+
+    const dataObj=this.options.value[0];
+    const row = dataObj.renderer.closest('data-view-table-row');
+    const rowId= row.rowId;
+    const database = dataObj.renderer.closest('affine-database');
+    const model = database.dataSource._model;
+    
+    let pkey;
+    model.children.forEach(element => {
+      if (element.id !== rowId) return;
+      const deltas = element.text.deltas$.value;
+      deltas.map(delta => {
+        if (isLinkedDoc(delta)) {
+          const linkedDocId = delta.attributes?.reference?.pageId as string;
+          pkey=workspace.getDoc(linkedDocId)?.meta?.title;
+        }
+        else{
+          pkey=delta.insert;
+        }
+      });
+    });
+    return pkey;
+  }
+
+  private getTargetTableCell(id:string) {
+
+    const dataObj=this.options.value[0];
+    const workspace = dataObj.workspace;
+
+    const model= dataObj.dataDoc.model;
+    const cellName=id.split('-')[1];
+    
+    const propertyId= model.columns.find(v=>v.name==='[相关]'+dataObj.thisTableName)?.id;
+
+    let rowId;
+    model.children.forEach(element => {
+        const deltas = element.text.deltas$.value;
+        deltas.map(delta => {
+                      if (isLinkedDoc(delta)) {
+                        const linkedDocId = delta.attributes?.reference?.pageId as string;
+                        if(workspace.getDoc(linkedDocId)?.meta?.title==cellName) 
+                          rowId=element.id;
+                      }
+                      if(delta.insert==cellName) {
+                        rowId=element.id; 
+                      }
+
+                  });
+    });
+
+    return [model, rowId, propertyId];
+  }
+
+  private _onDeleteSelected = (selectedValue: string[], value: string) => {
+    const filteredValue = selectedValue.filter(item => item !== value);
+    const [model, rowId, propertyId]=this.getTargetTableCell(value);    
+    const dataObj=this.options.value[0];
+
+    const myObj = model.cells[rowId][propertyId];
+    const valueArray = myObj.value;
+
+    const index= valueArray.findIndex(item => item === dataObj.thisTableName+"-"+this.getPrimaryKey());
+
+    if (index !== -1) {
+      valueArray.splice(index, 1);
+    }
+
+    this.onChange(filteredValue);
+  };
+
+
   private _onSelect = (id: string) => {
     const isExist = this.value.some(item => item === id);
     if (isExist) {
@@ -209,18 +285,40 @@ export class DataRefSelect extends SignalWatcher(
       return;
     }
 
+    const [model, rowId, propertyId]=this.getTargetTableCell(id);
+    const dataObj=this.options.value[0];
+    
+    if(model.cells[rowId][propertyId]==undefined) 
+    {
+      const myObj = new Y.Map();
+      myObj.set('columnId', propertyId);
+      const valueArray = new Y.Array();
+      valueArray.push([dataObj.thisTableName+"-"+this.getPrimaryKey()]);
+      myObj.set('value', valueArray);
+     
+      model.cells[rowId] = {
+              ...model.cells[rowId],
+              [propertyId]: myObj,
+            };
+    }
+    else{
+      const myObj = model.cells[rowId][propertyId];
+
+      const valueArray = myObj.value;
+      valueArray.push(dataObj.thisTableName+"-"+this.getPrimaryKey());
+      
+    }
+
+
     const isSelected = this.value.indexOf(id) > -1;
     if (!isSelected) {
-      const newValue = this.isSingleMode ? [id] : [...this.value, id];
+      const newValue = [...this.value, id];
       this.onChange(newValue);
-      if (this.isSingleMode) {
-        requestAnimationFrame(() => {
-          this.editComplete();
-        });
-      }
     }
     this.text.value = '';
   };
+
+
 
   @property({ attribute: false })
   accessor options!: ReadonlySignal<SelectTag[]>;
@@ -402,7 +500,6 @@ export class DataRefSelect extends SignalWatcher(
           select => select.id,
           (select, index) => {
             const isSelected = index === this.selectedIndex;
-
 
             return html`
                 <div

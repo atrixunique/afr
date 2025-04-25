@@ -167,6 +167,8 @@ export class BlockQueryDataSource extends DataSourceBase {
       type ?? propertyPresets.multiSelectPropertyConfig.type
     ].create(this.newColumnName());
 
+    // console.log(column);
+
     const id = doc.workspace.idGenerator();
     if (this.block.columns.some(v => v.id === id)) {
       return id;

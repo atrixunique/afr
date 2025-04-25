@@ -6,6 +6,7 @@ export class DevCommand extends PackageSelectorCommand {
   static override paths = [['dev'], ['d']];
 
   protected override availablePackages: PackageName[] = [
+    '@affine/admin',
     '@affine/web',
     '@affine/server',
     '@affine/electron',
