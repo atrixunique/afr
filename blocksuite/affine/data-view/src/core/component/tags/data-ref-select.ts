@@ -266,7 +266,7 @@ export class DataRefSelect extends SignalWatcher(
     const [model, rowId, propertyId]=this.getTargetTableCell(value);    
     const dataObj=this.options.value[0];
 
-    const myObj = model.cells[rowId][propertyId];
+    const myObj = model.cells[rowId]?.[propertyId];
     const valueArray = myObj.value;
 
     const index= valueArray.findIndex(item => item === dataObj.thisTableName+"-"+this.getPrimaryKey());
@@ -289,7 +289,11 @@ export class DataRefSelect extends SignalWatcher(
     const [model, rowId, propertyId]=this.getTargetTableCell(id);
     const dataObj=this.options.value[0];
     
-    if(model.cells[rowId][propertyId]==undefined) 
+    // console.log(model);
+    // console.log(rowId);
+    // console.log(propertyId);
+
+    if(model.cells[rowId]?.[propertyId]==undefined) 
     {
       const myObj = new Y.Map();
       myObj.set('columnId', propertyId);
@@ -309,7 +313,6 @@ export class DataRefSelect extends SignalWatcher(
       valueArray.push(dataObj.thisTableName+"-"+this.getPrimaryKey());
       
     }
-
 
     const isSelected = this.value.indexOf(id) > -1;
     if (!isSelected) {

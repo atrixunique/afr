@@ -21,7 +21,7 @@ export function createDatabaseOptionsConfig(framework: FrameworkProvider) {
     configure: (model: DatabaseBlockModel, options: MenuOptions) => {
       const items = options.items;
 
-      items.splice(2, 0, createCopyLinkToBlockMenuItem(framework, model));
+      // items.splice(2, 0, createCopyLinkToBlockMenuItem(framework, model));
 
       return options;
     },
