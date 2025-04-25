@@ -213,6 +213,7 @@ export class DataRefSelect extends SignalWatcher(
     const rowId= row.rowId;
     const database = dataObj.renderer.closest('affine-database');
     const model = database.dataSource._model;
+    const workspace = dataObj.workspace;
     
     let pkey;
     model.children.forEach(element => {
