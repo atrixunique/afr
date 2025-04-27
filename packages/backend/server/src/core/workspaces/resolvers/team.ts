@@ -75,6 +75,8 @@ export class TeamWorkspaceResolver {
       Permission.Admin
     );
 
+
+
     if (emails.length > 512) {
       return new TooManyRequest();
     }
@@ -83,14 +85,16 @@ export class TeamWorkspaceResolver {
     const lockFlag = `invite:${workspaceId}`;
     await using lock = await this.mutex.acquire(lockFlag);
     if (!lock) {
+      console.log('lock to prevent concurrent invite.');
       return new TooManyRequest();
     }
 
+    
     const quota = await this.quota.getWorkspaceUsage(workspaceId);
 
     const results = [];
     for (const [idx, email] of emails.entries()) {
-      const ret: InviteResult = { email, sentSuccess: false, inviteId: null };
+      const ret: InviteResult = { email, sentSuccess: true, inviteId: null };
       try {
         let target = await this.models.user.getUserByEmail(email);
         if (target) {
@@ -119,19 +123,45 @@ export class TeamWorkspaceResolver {
             ? WorkspaceMemberStatus.NeedMoreSeat
             : WorkspaceMemberStatus.Pending
         );
+
+        
+
+        const status = await this.permissions.getWorkspaceMemberStatus(
+          workspaceId,
+          target.id
+        );
+
+        if (status) {
+          if (status === WorkspaceMemberStatus.Pending) {
+            const result = await this.permissions.grant(
+              workspaceId,
+              target.id,
+              Permission.Write,
+              WorkspaceMemberStatus.Accepted
+            );
+  
+            if (result) {
+              this.event.emit('workspace.members.requestApproved', {
+                inviteId: result,
+              });
+            }
+            
+          }
+        }
+
         // NOTE: we always send email even seat not enough
         // because at this moment we cannot know whether the seat increase charge was successful
         // after user click the invite link, we can check again and reject if charge failed
-        if (sendInviteMail) {
-          try {
-            await this.workspaceService.sendInviteEmail(ret.inviteId);
-            ret.sentSuccess = true;
-          } catch (e) {
-            this.logger.warn(
-              `failed to send ${workspaceId} invite email to ${email}: ${e}`
-            );
-          }
-        }
+        // if (sendInviteMail) {
+        //   try {
+        //     await this.workspaceService.sendInviteEmail(ret.inviteId);
+        //     ret.sentSuccess = true;
+        //   } catch (e) {
+        //     this.logger.warn(
+        //       `failed to send ${workspaceId} invite email to ${email}: ${e}`
+        //     );
+        //   }
+        // }
       } catch (e) {
         this.logger.error('failed to invite user', e);
       }

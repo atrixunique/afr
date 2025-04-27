@@ -44,7 +44,7 @@ export const ModalContent = ({
 
   return (
     <div className={styles.modalContent}>
-      <div>{t['com.affine.payment.member.team.invite.description']()}</div>
+      <div>邀请成员加入工作区</div>
       <RadioGroup
         width={'100%'}
         value={inviteMethod}
@@ -65,7 +65,7 @@ export const ModalContent = ({
             label: (
               <RadioItem
                 icon={<LinkIcon className={styles.iconStyle} />}
-                label={`${t['com.affine.payment.member.team.invite.invite-link']()}(Coming soon)`}
+                label={`暂未开放`}
               />
             ),
             value: 'link',
@@ -82,7 +82,7 @@ export const ModalContent = ({
           handleConfirm={handleConfirm}
           isMutating={isMutating}
           isValidEmail={isValidEmail}
-          importCSV={importCSV}
+          // importCSV={importCSV}
         />
       ) : (
         <LinkInvite
