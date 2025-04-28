@@ -100,13 +100,13 @@ export const StorageProgress = ({ onUpgrade }: StorageProgressProgress) => {
               : t['com.affine.storage.maximum-tips.pro']()
           }
         >
-          <span tabIndex={0}>
+          {/* <span tabIndex={0}>
             <Button variant={buttonType} onClick={onUpgrade}>
               {isFreeUser
                 ? t['com.affine.storage.upgrade']()
                 : t['com.affine.storage.change-plan']()}
             </Button>
-          </span>
+          </span> */}
         </Tooltip>
       ) : null}
     </div>
